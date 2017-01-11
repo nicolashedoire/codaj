@@ -18,7 +18,7 @@ var server = http.createServer((req, res)=> {
 	res.end('it works at ' + req.connection.remoteAddress);
 });
 */
-server.listen(process.env.PORT || 3000 , () =>{
+app.listen(process.env.PORT || 3000 , () =>{
 	console.log('works on port : ' + process.env.PORT);
 });
 
