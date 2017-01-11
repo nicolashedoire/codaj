@@ -6,7 +6,7 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 /* configuration */
-app.use(express.static(__dirname + '/src/assets'));
+app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
 app.use(bodyParser.json());
 app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
