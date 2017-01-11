@@ -10,7 +10,8 @@ var server = http.createServer((req, res)=> {
 	res.end('it works at ' + req.connection.remoteAddress);
 });
 
-server.listen(3000);
-console.log('server listen on port : 3000');
+server.listen(process.env.PORT || 3000 , () =>{
+	console.log('works on port : ' + process.env.PORT);
+});
 
 // TODO => if NODE ENV == PROD / PREPROD / DEV
