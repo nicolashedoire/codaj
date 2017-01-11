@@ -1,6 +1,6 @@
 {
   "name": "coding",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "coding website",
   "main": "app.js",
   "scripts": {
@@ -8,5 +8,8 @@
     "start": "node app.js"
   },
   "author": "nicolas hedoire",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
 }
