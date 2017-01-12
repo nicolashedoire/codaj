@@ -1,0 +1,24 @@
+{
+  "name": "coding",
+  "description": "coding website",
+  "main": "app.js",
+  "authors": [
+    "nicolas hedoire"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "codaj"
+  ],
+  "homepage": "https://github.com/nicolashedoire/codaj",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap": "^2.4.0",
+    "bootstrap": "^3.3.7"
+  }
+}

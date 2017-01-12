@@ -1,0 +1,63 @@
+/* General */
+.pointer{
+	cursor : pointer;
+}
+
+.round{
+	  /* Safari 3-4, iOS 1-3.2, Android 1.6- */
+  -webkit-border-radius: 50%; 
+  /* Firefox 1-3.6 */
+  -moz-border-radius: 50%; 
+  /* Opera 10.5, IE 9, Safari 5, Chrome, Firefox 4, iOS 4, Android 2.1+ */
+  border-radius: 50%; 
+}
+
+.dropdown-menu {
+    margin: 0.42rem 0 0;
+    border-radius: 0;
+}
+
+/* Custom button */
+
+.btn-outline-white {
+    color: rgba(255, 255, 255, 0.5);;
+    background-image: none;
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.5);;
+}
+
+.btn-outline-white:hover {
+    color: rgba(0, 0, 0, 0.8);;
+    background-color: white;
+    border-color: white;
+}
+
+/* Footer */
+
+.footer > .container{
+  margin-top: 10px;
+}
+
+.mt-10 , .mt10{
+	margin-top: 10px;
+}
+
+/* voice */
+
+#voice{
+  margin: 50px;
+  width: 70px;
+  height: 70px;
+  background-color: #292b2c;
+/*   background-color: dodgerblue; */
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+  text-align: center;
+  cursor: pointer;
+}
+
+#voice span{
+  color : white;
+  font-size: 28px;
+  top: 20%;
+  position: relative;
+}
