@@ -84,6 +84,18 @@ body > .container {
 	margin-top: 10px;
 }
 
+.mt-15 , .mt15{
+  margin-top: 15px;
+}
+
+.mt-20 , .mt20{
+  margin-top: 20px;
+}
+
+.mt-25 , .mt25{
+  margin-top: 25px;
+}
+
 .m25, .m-25{
   margin: 25px;
 }
