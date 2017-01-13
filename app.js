@@ -1,9 +1,29 @@
 var env = process.env.NODE_ENV;
-var path = require('path');
+var mysql = require('mysql');
+var path  = require('path');
 var bodyParser    = require('body-parser');
 var express = require('express');
-var app = express();
+var app  = express();
 var port = process.env.PORT || 3000;
+var connection;
+
+if(port === 3000){
+	// only for local database
+	connection = mysql.createConnection({
+	  host     : 'localhost',
+	  user     : 'root',
+	  password : '',
+	  database : 'codaj'
+	});
+
+	connection.connect(function(err){
+		if(!err){
+			console.log('Database is connected ...');
+		}else{
+			console.log('Error connecting database');
+		}
+	});
+}
 
 /* configuration */
 app.use(express.static(__dirname + '/public'));

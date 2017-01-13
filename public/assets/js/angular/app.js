@@ -43,14 +43,40 @@
 	    // controllers
 	    // 
 		app.controller("codingCtrl" , function($scope , $location){
+
 		    $scope.$watch(function(){
 		       return $location.path(); 
 		    }, function(newPath){
 		        console.log(newPath);
 		    });
+
+		    $scope.postQuestion = function(){
+		    	alert($scope.question);
+		    }
+
+		    $scope.bigData = {};
+			$scope.bigData.postQuestion = false;
+			$scope.bigData.getResponse = false;
+			$scope.bigData.searchPlaceholder = 'Posez une question ?';
+
+			$scope.$watch('bigData.postQuestion ', function(newValue, oldValue){
+				/*console.log(newValue + ' ' + oldValue);*/
+				$scope.question = '';
+				if(newValue){
+					$scope.bigData.searchPlaceholder = 'Poster une question';
+				}else{
+					$scope.bigData.searchPlaceholder = 'Posez une question ?';
+				}
+			});
+
+			$scope.$watch('question' , function(val){
+				console.log(val);
+				// TODO for validate string
+			});
 		});
 
 		app.controller("homeController" , function($scope , $location){
+
 
 		});
 
