@@ -42,7 +42,7 @@
 
 	    // controllers
 	    // 
-		app.controller("codingCtrl" , function($scope , $location){
+		app.controller("codingCtrl" , function($scope , $location , $http){
 
 		    $scope.$watch(function(){
 		       return $location.path(); 
@@ -51,7 +51,15 @@
 		    });
 
 		    $scope.postQuestion = function(){
-		    	alert($scope.question);
+		       $http({
+		       		url: 'insertQuestion',
+					method: 'POST',
+					data: { question : '$scope.question' }
+			   }).then((response) => {
+			    	console.log(response); 
+				} , function(error){
+					console.log(error);
+				});
 		    }
 
 		    $scope.bigData = {};

@@ -43,6 +43,11 @@ app.get('/' , (req, res) => {
 	res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+app.post('/insertQuestion' , (req, res) => {
+	console.log(req.body);
+	res.end();
+});
+
 app.listen(port , () =>{
 	console.log('works on port : ' + process.env.PORT);
 });
