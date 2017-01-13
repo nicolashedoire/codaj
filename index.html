@@ -133,7 +133,7 @@
 		</div>
 		<div class="col-md-11">
 		    <div class="input-group">
-			    <input type="text" class="form-control form-search" ng-init="question=''" ng-model="question" aria-label="..." placeholder="{{bigData.searchPlaceholder}}">
+			    <input type="text" class="form-control form-search" focus="{{bigData.postQuestion}}" ng-init="question=''" ng-model="question" aria-label="..." placeholder="{{bigData.searchPlaceholder}}">
 			    <div class="input-group-btn dropdown" uib-dropdown>
 			    	<button type="button" class="btn btn-default dropdown-toggle btn-search" uib-dropdown-toggle data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			    	Catégories 
@@ -153,21 +153,19 @@
 		<div class="col-md-12 mt10" id="module"></div>
   		<!-- Page content -->
   			<div class="btn-group" data-toggle="buttons">
-		        <label class="btn btn-ui" ng-model="bigData.postQuestion" uib-btn-checkbox>Post question</label>
+		        <label class="btn btn-ui" ng-model="bigData.postQuestion" uib-btn-checkbox>Insert question</label>
 <!-- 		        <label class="btn btn-ui" ng-model="bigData.getResponse" uib-btn-checkbox>Get response</label> -->
 			</div>
 			<button class="btn btn-ui" ng-class="{disabled: bigData.postQuestion == false}" ng-click="postQuestion()">Post data</button>
-			<!-- <pre><code>{{ bigData | json }}</code></pre> -->
+<!-- 	 		<pre><code>{{ bigData | json }}</code></pre>  -->
 	</div>
 
-
+	<hr>
 	<div class="container-fluid mt25">
 		<div class="row">
 			<div ng-view></div>
 		</div>
 	</div>
-
-
 
  	<footer class="footer">
  	  <div class="container">

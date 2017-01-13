@@ -1,4 +1,24 @@
-<ol class="breadcrumb">
-  <li><a href="#/">Home</a></li>
-  <li><a href="#/database">database</a></li>
-</ol>
+<div class="container">
+	<ol class="breadcrumb">
+	  <li><a href="#/">Home</a></li>
+	  <li><a href="#/database">database</a></li>
+	</ol>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Technologie</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="question in questions">
+      <td>{{question.id}}</td>
+      <td>{{question.name}}</td>
+      <td>{{question.tech_id}}</td>
+      <td><span class="pointer" data-value="{{question.id}}">supprimer</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

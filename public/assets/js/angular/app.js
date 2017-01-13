@@ -39,11 +39,9 @@
 	            .otherwise({ redirectTo: '/login' });
 	    });
 
-
 	    // controllers
 	    // 
 		app.controller("codingCtrl" , function($scope , $location , $http){
-
 		    $scope.$watch(function(){
 		       return $location.path(); 
 		    }, function(newPath){
@@ -51,15 +49,23 @@
 		    });
 
 		    $scope.postQuestion = function(){
-		       $http({
-		       		url: 'insertQuestion',
-					method: 'POST',
-					data: { question : '$scope.question' }
-			   }).then((response) => {
-			    	console.log(response); 
-				} , function(error){
-					console.log(error);
-				});
+		    	if($scope.bigData.postQuestion && $scope.question !== ''){
+			       $http({
+			       		url: 'insertQuestion',
+						method: 'POST',
+						data: { question : $scope.question }
+				   }).then((response) => {
+				    	console.log(response); 
+					} , function(error){
+						console.log(error);
+					});
+		    	}
+		    }
+
+		    $scope.focusSearch = function(){
+		    	if($scope.bigData.postQuestion){
+		    		
+		    	}
 		    }
 
 		    $scope.bigData = {};
@@ -68,7 +74,6 @@
 			$scope.bigData.searchPlaceholder = 'Posez une question ?';
 
 			$scope.$watch('bigData.postQuestion ', function(newValue, oldValue){
-				/*console.log(newValue + ' ' + oldValue);*/
 				$scope.question = '';
 				if(newValue){
 					$scope.bigData.searchPlaceholder = 'Poster une question';
@@ -159,7 +164,6 @@
 			    data: data
 			});
 
-
 			var data = {
 			    datasets: [{
 			        data: [
@@ -186,6 +190,7 @@
 			        "Blue"
 			    ]
 			};
+
 			var ctx = document.getElementById("threeChart");
 			var Chart3 = new Chart(ctx, {
 			    data: data,
@@ -209,8 +214,16 @@
 
 		});
 
-		app.controller("databaseController" , function($scope , $location){
-
+		app.controller("databaseController" , function($scope , $location , $http){
+	        $http({
+	            method: 'GET',
+	            url: '/listQuestions'
+	        }).then(function successCallback(response) {
+	            console.log(response.data);
+	            $scope.questions = response.data;
+	        }, function errorCallback(response) {
+	            console.log(response);
+	        });
 		});
 
 		app.controller("myaccountController" , function($scope , $location){
@@ -220,3 +233,23 @@
 		app.controller("subscriptionsController" , function($scope , $location){
 
 		});
+
+
+		// directive to focus input field
+		app.directive('focus',
+			function($timeout) {
+			 return {
+			 scope : {
+			   trigger : '@focus'
+			 },
+			 link : function(scope, element) {
+			  scope.$watch('trigger', function(value) {
+			    if (value === "true") {
+			      $timeout(function() {
+			       element[0].focus();
+			      });
+			   }
+			 });
+			 }
+			};
+		}); 

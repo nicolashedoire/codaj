@@ -43,9 +43,38 @@ app.get('/' , (req, res) => {
 	res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+
+app.get('/listQuestions' , (req , res) => {
+	// condition for local only
+	if(port === 3000){
+
+		var query = 'SELECT id, name , tech_id from questions';
+		connection.query( query , function(err , rows , fields) {
+			if(err) throw err;
+			for(var i in rows){
+				console.log('Post questions : ' , rows[i].name);
+			}
+			res.send(rows);
+		});
+	}
+});
+
 app.post('/insertQuestion' , (req, res) => {
-	console.log(req.body);
-	res.end();
+	console.log(req.body.question);
+	var post = {
+		name 	: req.body.question ,
+		tech_id : 1
+	}
+	// condition for local only
+	if(port === 3000){
+		connection.query('INSERT INTO questions SET ?' , post , (err , result) =>{
+			if(!err){
+				res.end();
+			}
+		});
+	}else{
+		res.end([]);
+	}
 });
 
 app.listen(port , () =>{
