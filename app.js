@@ -74,9 +74,10 @@ app.get('/listTechnologies' , (req , res) => {
 
 app.post('/insertQuestion' , (req, res) => {
 	console.log(req.body.question);
+	console.log(req.body.technologieId);
 	var post = {
 		name 	: req.body.question ,
-		tech_id : 1
+		tech_id : parseInt(req.body.technologieId)
 	}
 	// condition for local only
 	if(port === 3000){

@@ -44,19 +44,20 @@
 		app.controller("codingCtrl" , function($scope , $location , $http){
 
 			$scope.selectedCategory = "Categories";
+			$scope.selectCategoryId = 0;
 
-			$scope.selectCategory = function(category){
+			$scope.selectCategory = function(category , id){
 				$scope.selectedCategory = category;
+				$scope.selectCategoryId = id;
 			}
 
 	        $http({
 	            method: 'GET',
 	            url: '/listTechnologies'
 	        }).then(function successCallback(response) {
-	            console.log(response.data);
 	            $scope.categories = response.data;
-	        }, function errorCallback(response) {
-	            console.log(response);
+	        }, function errorCallback(err) {
+	            console.log(err);
 	        });
 
 			// WATCHER ON URL
@@ -72,7 +73,10 @@
 			       $http({
 			       		url: 'insertQuestion',
 						method: 'POST',
-						data: { question : $scope.question }
+						data: { 
+							question : $scope.question ,
+							technologieId : $scope.selectCategoryId
+						}
 				   }).then((response) => {
 				    	console.log(response); 
 					} , function(error){
@@ -84,19 +88,19 @@
 		    $scope.bigData = {};
 			$scope.bigData.postQuestion = false;
 			$scope.bigData.getResponse = false;
-			$scope.bigData.searchPlaceholder = 'Posez une question ?';
+			$scope.bigData.searchPlaceholder = 'Posez une question et choisissez une catégorie';
 
 			$scope.$watch('bigData.postQuestion ', function(newValue, oldValue){
 				$scope.question = '';
 				if(newValue){
 					$scope.bigData.searchPlaceholder = 'Poster une question';
 				}else{
-					$scope.bigData.searchPlaceholder = 'Posez une question ?';
+					$scope.bigData.searchPlaceholder = 'Posez une question et choisissez une catégorie';
 				}
 			});
 
 			$scope.$watch('question' , function(val){
-				console.log(val);
+				/*console.log(val);*/
 				// TODO for validate string
 			});
 		});
@@ -236,6 +240,10 @@
 	        }, function errorCallback(response) {
 	            console.log(response);
 	        });
+
+	        $scope.sortType     = 'name'; // set the default sort type
+  			$scope.sortReverse  = false;  // set the default sort order
+  			$scope.searchQuestion   = '';     // set the default search/filter term
 		});
 
 		app.controller("myaccountController" , function($scope , $location){
