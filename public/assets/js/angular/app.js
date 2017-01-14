@@ -36,6 +36,10 @@
 	                templateUrl : 'views/subscriptions.html',
 	                controller : 'subscriptionsController'
 	            })
+	            .when('/technology/:itemName' , {
+	                templateUrl : 'views/detailsTechnology.html',
+	                controller : 'detailsTechnologyController'
+	            })
 	            .otherwise({ redirectTo: '/login' });
 	    });
 
@@ -251,6 +255,11 @@
 	        $scope.sortType     = 'name'; // set the default sort type
   			$scope.sortReverse  = false;  // set the default sort order
   			$scope.searchQuestion   = '';     // set the default search/filter term
+		});
+
+
+		app.controller('detailsTechnologyController' , function($scope, $location , $routeParams){
+			$scope.itemName = $routeParams.itemName;
 		});
 
 		app.controller("myaccountController" , function($scope , $location){
