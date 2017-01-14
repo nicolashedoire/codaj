@@ -61,11 +61,15 @@
 	        });
 
 			// WATCHER ON URL
+			
+			$scope.arianeUrl = '';
+			$scope.arianeText = '';
 
 		    $scope.$watch(function(){
 		       return $location.path(); 
 		    }, function(newPath){
-		        console.log(newPath);
+		        $scope.arianeUrl = newPath;
+		        $scope.arianeText = newPath.replace("/", "");
 		    });
 
 		    $scope.postQuestion = function(){
