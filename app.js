@@ -61,7 +61,7 @@ app.get('/listQuestions' , (req , res) => {
 app.get('/listTechnologies' , (req , res) => {
 	// condition for local only
 	if(port === 3000){
-		var query = 'SELECT id , name , slug  from technologies';
+		var query = 'SELECT id , name , slug , description from technologies';
 		connection.query( query , function(err , rows , fields) {
 			if(err) throw err;
 			for(var i in rows){

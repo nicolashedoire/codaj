@@ -110,7 +110,7 @@
 		});
 
 		app.controller("homeController" , function($scope , $location){
-
+			$scope.buttonDiscover = 'Discover';
 		});
 
 		app.controller("dashboardController" , function($scope , $location){
@@ -235,6 +235,9 @@
 		});
 
 		app.controller("databaseController" , function($scope , $location , $http){
+
+			$scope.titleQuestions = 'Liste des questions';
+
 	        $http({
 	            method: 'GET',
 	            url: '/listQuestions'

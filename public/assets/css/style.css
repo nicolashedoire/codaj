@@ -140,6 +140,11 @@ body > .container {
   margin-top: 10px;
 }
 
+
+.m0{
+  margin :0;
+}
+
 .mt-10 , .mt10{
 	margin-top: 10px;
 }
@@ -175,6 +180,20 @@ body > .container {
 .mb0, .mb-0{
   margin-bottom: 0;
 }
+
+.mb5, .mb-5{
+  margin-bottom: 5px;
+}
+
+.mb10, .mb-10{
+  margin-bottom: 10px;
+}
+
+.mb15, .mb-15{
+  margin-bottom: 15px;
+}
+
+
 
 /* voice */
 
