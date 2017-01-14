@@ -5,12 +5,12 @@
 
 <div class="container">
 
-  <div class="alert alert-info">
-    <p>Sort Type: {{ sortType }}</p>
-    <p>Sort Reverse: {{ sortReverse }}</p>
-    <p>Search Query: {{ searchQuestion }}</p>
-  </div>
-
+<!--   <div class="alert alert-info">
+  <p>Sort Type: {{ sortType }}</p>
+  <p>Sort Reverse: {{ sortReverse }}</p>
+  <p>Search Query: {{ searchQuestion }}</p>
+</div>
+ -->
   <form>
     <div class="form-group">
       <div class="input-group">
@@ -31,17 +31,17 @@
           </a>
         </th>
         <th>
-          <a ng-click="sortType = 'questions'; sortReverse = !sortReverse">
+          <a ng-click="sortType = 'questionName'; sortReverse = !sortReverse">
             Questions
-            <span ng-show="sortType == 'questions' && !sortReverse" class="fa fa-caret-down"></span>
-            <span ng-show="sortType == 'questions' && sortReverse" class="fa fa-caret-up"></span>
+            <span ng-show="sortType == 'questionName' && !sortReverse" class="fa fa-caret-down"></span>
+            <span ng-show="sortType == 'questionName' && sortReverse" class="fa fa-caret-up"></span>
           </a>       
         </th>
         <th>
-          <a ng-click="sortType = 'technologies'; sortReverse = !sortReverse">
+          <a ng-click="sortType = 'technoName'; sortReverse = !sortReverse">
             Technologies
-            <span ng-show="sortType == 'technologies' && !sortReverse" class="fa fa-caret-down"></span>
-            <span ng-show="sortType == 'technologies' && sortReverse" class="fa fa-caret-up"></span>
+            <span ng-show="sortType == 'technoName' && !sortReverse" class="fa fa-caret-down"></span>
+            <span ng-show="sortType == 'technoName' && sortReverse" class="fa fa-caret-up"></span>
           </a>
         </th>
         <th>
