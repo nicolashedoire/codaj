@@ -74,6 +74,7 @@
 		    }, function(newPath){
 		        $scope.arianeUrl = newPath;
 		        $scope.arianeText = newPath.replace("/", "");
+		        console.log($scope.arianeText);
 		    });
 
 		    $scope.postQuestion = function(){
