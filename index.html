@@ -136,13 +136,11 @@
 			    <input type="text" class="form-control form-search" focus="{{bigData.postQuestion}}" ng-init="question=''" ng-model="question" aria-label="..." placeholder="{{bigData.searchPlaceholder}}">
 			    <div class="input-group-btn dropdown" uib-dropdown>
 			    	<button type="button" class="btn btn-default dropdown-toggle btn-search" uib-dropdown-toggle data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			    	Catégories 
+			    	{{ selectedCategory }}
 			    	<span class="caret"></span>
 			    	</button>
 			        <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
-			          <li><a href="#">Questions</a></li>
-			          <li><a href="#">Interaction</a></li>
-			          <li><a href="#">Build</a></li>
+			          <li ng-repeat="category in categories" ng-click="selectCategory(category.name)"><a href="#">{{category.name}}</a></li>
 			          <li role="separator" class="divider"></li>
 			          <li><a href="#">Add new category</a></li>
 			        </ul>
@@ -160,8 +158,8 @@
 <!-- 	 		<pre><code>{{ bigData | json }}</code></pre>  -->
 	</div>
 
-	<hr>
-	<div class="container-fluid mt25">
+	<hr class="mb0">
+	<div class="container-fluid">
 		<div class="row">
 			<div ng-view></div>
 		</div>

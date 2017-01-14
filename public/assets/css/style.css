@@ -58,6 +58,10 @@ html{
     border-color: transparent;
 }
 
+.btn-ui:hover{
+  color: #ffffff;
+}
+
 
 /* container */
 
@@ -155,6 +159,10 @@ body > .container {
 
 .m10, .m-10{
   margin: 10px;
+}
+
+.mb0, .mb-0{
+  margin-bottom: 0;
 }
 
 /* voice */

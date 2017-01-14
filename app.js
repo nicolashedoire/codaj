@@ -47,12 +47,25 @@ app.get('/' , (req, res) => {
 app.get('/listQuestions' , (req , res) => {
 	// condition for local only
 	if(port === 3000){
-
-		var query = 'SELECT id, name , tech_id from questions';
+		var query = 'SELECT q.id, q.name as questionName , q.tech_id , t.name as technoName from questions as q INNER JOIN technologies as t on t.id = q.tech_id';
 		connection.query( query , function(err , rows , fields) {
 			if(err) throw err;
 			for(var i in rows){
 				console.log('Post questions : ' , rows[i].name);
+			}
+			res.send(rows);
+		});
+	}
+});
+
+app.get('/listTechnologies' , (req , res) => {
+	// condition for local only
+	if(port === 3000){
+		var query = 'SELECT id , name , slug  from technologies';
+		connection.query( query , function(err , rows , fields) {
+			if(err) throw err;
+			for(var i in rows){
+				console.log('Post technologies : ' , rows[i].name);
 			}
 			res.send(rows);
 		});

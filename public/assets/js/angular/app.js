@@ -42,6 +42,25 @@
 	    // controllers
 	    // 
 		app.controller("codingCtrl" , function($scope , $location , $http){
+
+			$scope.selectedCategory = "Categories";
+
+			$scope.selectCategory = function(category){
+				$scope.selectedCategory = category;
+			}
+
+	        $http({
+	            method: 'GET',
+	            url: '/listTechnologies'
+	        }).then(function successCallback(response) {
+	            console.log(response.data);
+	            $scope.categories = response.data;
+	        }, function errorCallback(response) {
+	            console.log(response);
+	        });
+
+			// WATCHER ON URL
+
 		    $scope.$watch(function(){
 		       return $location.path(); 
 		    }, function(newPath){
@@ -59,12 +78,6 @@
 					} , function(error){
 						console.log(error);
 					});
-		    	}
-		    }
-
-		    $scope.focusSearch = function(){
-		    	if($scope.bigData.postQuestion){
-		    		
 		    	}
 		    }
 
@@ -89,7 +102,6 @@
 		});
 
 		app.controller("homeController" , function($scope , $location){
-
 
 		});
 
