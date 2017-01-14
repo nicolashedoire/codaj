@@ -281,7 +281,11 @@
 		});
 
 		app.controller("myaccountController" , function($scope , $location){
-
+			$scope.myaccountTitle = 'Account';
+			$scope.profileTitle = 'Profile';
+			$scope.updateProfile = 'Update profile';
+			$scope.paymentTitle = 'Payment method';
+			$scope.billingAdress = 'Billing Adress';
 		});
 
 		app.controller("subscriptionsController" , function($scope , $location){

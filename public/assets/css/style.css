@@ -69,6 +69,10 @@ html{
     border-color: transparent;
 }
 
+.h55{
+  height: 55px;
+}
+
 .btn-ui:hover{
   color: #ffffff;
 }
@@ -114,6 +118,14 @@ body > .container {
   height: 55px;
 }
 
+.form-custom{
+ height: 55px; 
+}
+
+.input-group-custom{
+  width: 50%;
+}
+
 /* input-group */
 
 .input-group-btn > .btn {
@@ -138,6 +150,27 @@ body > .container {
 
 .footer > .container{
   margin-top: 10px;
+}
+
+.clear{
+  clear: both;
+}
+
+.fs24{
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.fs20{
+  font-size: 20px;
+}
+
+.fw600{
+  font-weight: 600;
+}
+
+.rel{
+  position : relative;
 }
 
 
@@ -193,7 +226,21 @@ body > .container {
   margin-bottom: 15px;
 }
 
+.mb20, .mb-20{
+  margin-bottom: 20px;
+}
 
+.mb25, .mb-25{
+  margin-bottom: 25px;
+}
+
+.mb100, .mb-100{
+  margin-bottom: 70px;
+}
+
+.w40{
+  width: 60px;
+}
 
 /* voice */
 
