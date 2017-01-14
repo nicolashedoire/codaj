@@ -74,7 +74,11 @@
 		    }, function(newPath){
 		        $scope.arianeUrl = newPath;
 		        $scope.arianeText = newPath.replace("/", "");
-		        console.log($scope.arianeText);
+		        if($scope.arianeText.indexOf("/") !== -1){
+		        	var path = $scope.arianeText;
+		        	path = path.replace('technology/' , '');
+		        	$scope.arianeText = path;
+		        }
 		    });
 
 		    $scope.postQuestion = function(){
@@ -259,8 +263,21 @@
 		});
 
 
-		app.controller('detailsTechnologyController' , function($scope, $location , $routeParams){
+		app.controller('detailsTechnologyController' , function($scope, $location,$http, $routeParams){
 			$scope.itemName = $routeParams.itemName;
+			$scope.results = false;
+			$scope.noResults = 'il n\'y a pas encore de questions pour cette technologie...';
+			$http({
+	            method: 'GET',
+	            url: '/listQuestions/' + $routeParams.itemName
+	        }).then(function successCallback(response) {
+	            if(response.data.length > 0){
+	            	$scope.questions = response.data;
+	            	$scope.results = true;
+	            }
+	        }, function errorCallback(err) {
+	            console.log(err);
+	        });
 		});
 
 		app.controller("myaccountController" , function($scope , $location){

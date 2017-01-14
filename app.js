@@ -50,9 +50,17 @@ app.get('/listQuestions' , (req , res) => {
 		var query = 'SELECT q.id, q.name as questionName , q.tech_id , t.name as technoName from questions as q INNER JOIN technologies as t on t.id = q.tech_id';
 		connection.query( query , function(err , rows , fields) {
 			if(err) throw err;
-			for(var i in rows){
-				console.log('Post questions : ' , rows[i].name);
-			}
+			res.send(rows);
+		});
+	}
+});
+
+app.get('/listQuestions/:itemName' , (req , res) => {
+	// condition for local only
+	if(port === 3000){
+		var query = 'SELECT q.id , q.name from `technologies`as t inner join questions as q on q.tech_id = t.id WHERE t.slug=?';
+		connection.query( query , req.params.itemName , function(err , rows , fields) {
+			if(err) throw err;
 			res.send(rows);
 		});
 	}
@@ -64,9 +72,6 @@ app.get('/listTechnologies' , (req , res) => {
 		var query = 'SELECT id , name , slug , description from technologies';
 		connection.query( query , function(err , rows , fields) {
 			if(err) throw err;
-			for(var i in rows){
-				console.log('Post technologies : ' , rows[i].name);
-			}
 			res.send(rows);
 		});
 	}

@@ -1,3 +1,8 @@
 <div class="container">
-	<h1>{{itemName}}</h1>
+	<h1 class="mb15">{{itemName}}</h1>
+
+	<div ng-hide="results" class="alert alert-danger" role="alert">
+		<p>{{noResults}}</p>
+	</div>
+	<p ng-show="results" ng-repeat="question in questions">{{question.name}}</p>
 </div>
