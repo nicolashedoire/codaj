@@ -48,10 +48,10 @@
 			      <li>
 			      	<a href="auth/facebook" >Login</a>
 			      </li>
-				  <li class="dropdown" uib-dropdown>
-				    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>
+<!-- 				  <li class="dropdown" uib-dropdown>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>
 					<i class="fa fa-bell-o" aria-hidden="true"></i>
-				    </a>
+  </a>
 			       	<ul class="dropdown-menu drop-notifs" uib-dropdown-menu>
 			        	<li>
 			        		<a href="#">
@@ -66,7 +66,7 @@
 										<div class="notif-message pointer" title="See this message">
 											<span>
 												Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium fugiat, optio tempore consequatur facere iste hic perferendis rerum quam aspernatur quaerat architecto autem, nobis similique illum reiciendis ullam odit saepe.
-												<!-- <a href="#"><span>nicolashedoire@hotmail.com</span></a> -->
+												<a href="#"><span>nicolashedoire@hotmail.com</span></a>
 											</span>
 										</div>
 									</div>
@@ -96,26 +96,30 @@
 			            	</a>
 			            </li>
 			          </ul>
-				    </li>
-			        <li class="dropdown" uib-dropdown>
-			          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>
-			          	<span id="hello"></span>
-			          	<span class="caret"></span>
-			          </a>
-			          <ul class="dropdown-menu" uib-dropdown-menu>
-			            <li><a href="/myaccount">My account</a></li>
-			            <li><a href="/subscriptions">My Subscriptions</a></li>
-			            <li role="separator" class="divider"></li>
-			            <li><a href="/logout">Disconnect</a></li>
-			          </ul>
-			        </li>
+  </li> -->
+<!-- 			        <li class="dropdown" uib-dropdown>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>
+  	<span id="hello"></span>
+  	<span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" uib-dropdown-menu>
+    <li><a href="/myaccount">My account</a></li>
+    <li><a href="/subscriptions">My Subscriptions</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a href="/logout">Disconnect</a></li>
+  </ul>
+</li> -->
 			      </ul>
 			    </div>
 			  </div>
 			</nav>
+			<ol class="breadcrumb">
+				<li><a href="/">Home</a></li>
+				<li><a href="{{arianeUrl}}">{{arianeText}}</a></li>
+			</ol>
 		{% endblock %}
 		{% block voice %}
-			<div class="container" ng-hide="true">
+			<div class="container" ng-hide="false">
 				<div class="col-md-1">
 					<div id="voice" class="round start">
 						<span>
@@ -125,14 +129,14 @@
 				</div>
 				<div class="col-md-11">
 				    <div class="input-group">
-					    <input type="text" class="form-control form-search" focus="{{bigData.postQuestion}}" ng-init="question=''" ng-model="question" aria-label="..." placeholder="{{bigData.searchPlaceholder}}">
+					    <input type="text" class="form-control form-search" focus="{[{bigData.postQuestion}]}" ng-init="question=''" ng-model="question" aria-label="..." placeholder="{[{bigData.searchPlaceholder}]}">
 					    <div class="input-group-btn dropdown" uib-dropdown>
 					    	<button type="button" class="btn btn-default dropdown-toggle btn-search" uib-dropdown-toggle data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					    	{{ selectedCategory }}
+					    	{[{ selectedCategory }]}
 					    	<span class="caret"></span>
 					    	</button>
 					        <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
-					          <li ng-repeat="category in categories" ng-click="selectCategory(category.name , category.id)"><a class="pointer">{{category.name}}</a></li>
+					          <li ng-repeat="category in categories" ng-click="selectCategory(category.name , category.id)"><a class="pointer">{[{category.name}]}</a></li>
 					          <li role="separator" class="divider"></li>
 					          <li><a href="#">Add new category</a></li>
 					        </ul>
@@ -146,15 +150,13 @@
 					</div>
 					<button class="btn btn-ui" ng-class="{disabled: bigData.postQuestion == false}" ng-click="postQuestion()">Post data</button>
 			</div>
+			<hr>
 		{% endblock %}
 
 		<hr class="m0">
 		<div class="container-fluid">
 			<div class="row">
-				<ol class="breadcrumb">
-				  <li><a href="/">Home</a></li>
-				  <li><a href="{{arianeUrl}}">{{arianeText}}</a></li>
-				</ol>
+
 				{% block body %}
 				{% endblock %}
 			</div>

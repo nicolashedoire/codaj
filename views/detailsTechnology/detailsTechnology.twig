@@ -1,6 +1,6 @@
 {% extends 'layout.twig' %}
 
-{% block title %}{{parent()}} - Home{% endblock title %}
+{% block title %}{{parent()}} - Details techology{% endblock title %}
 
 {% block body %}
 
@@ -9,13 +9,13 @@
     </div>
 
 
-    <div class="container">
-    	<div ng-hide="results" class="alert alert-danger" role="alert">
-    		<p>{{noResults}}</p>
-    	</div>
+    <div class="container" ng-controller="detailsTechnologyController">
+<!--         <div ng-hide="results" class="alert alert-danger" role="alert">
+    <p>{{noResults}}</p>
+</div> -->
     	<!-- <p ng-show="results" ng-repeat="question in questions">{{question.name}}</p> -->
             {% for question in questions %}
-    			<div ng-show="results" class="col-lg-3 col-sm-6" ng-repeat="question in questions">
+    			<div class="col-lg-3 col-sm-6">
                 <div class="card hovercard">
                     <div class="cardheader">
     					<p>{{question.name}}</p>

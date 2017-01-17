@@ -56,14 +56,14 @@
 				$scope.selectCategoryId = id;
 			}
 
-/*	        $http({
+	        $http({
 	            method: 'GET',
 	            url: '/listTechnologies'
 	        }).then(function successCallback(response) {
 	            $scope.categories = response.data;
 	        }, function errorCallback(err) {
 	            console.log(err);
-	        });*/
+	        });
 
 			// WATCHER ON URL
 			

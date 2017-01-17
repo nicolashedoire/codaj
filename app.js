@@ -217,6 +217,19 @@ app.post('/insertQuestion' , (req, res , next) => {
 	}
 });
 
+app.get('/listTechnologies' , (req , res) => {
+ 	// condition for local only
+ 	var query = 'SELECT id , name , slug  from technologies';
+ 	connection.query( query , function(err , rows , fields) {
+ 		if(err) throw err;
+ 		for(var i in rows){
+ 			console.log('Post technologies : ' , rows[i].name);
+ 		}
+ 		res.send(rows);
+ 	});
+ });
+
+
 app.listen(port , () =>{
 	console.log('works on port : ' + process.env.PORT);
 });
