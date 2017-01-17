@@ -3,7 +3,7 @@
 {% block title %}{{parent()}} - Home{% endblock title %}
 
 {% block body %}
-  <div class="container">
+  <div class="container" ng-controller="databaseController">
   <!--   <div class="alert alert-info">
     <p>Sort Type: {{ sortType }}</p>
     <p>Sort Reverse: {{ sortReverse }}</p>
@@ -51,7 +51,8 @@
       </thead>
       <tbody>
         {% for question in questions %}
-          <tr class="pointer" ng-repeat="question in questions | orderBy:sortType:sortReverse | filter:searchQuestion">
+          <!-- ng-show="orderBy:sortType:sortReverse | filter:searchQuestion" -->
+          <tr class="pointer" >
             <td>{{question.id}}</td>
             <td>{{question.questionName}}</td>
             <td>{{question.technoName}}</td>

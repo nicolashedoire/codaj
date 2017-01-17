@@ -1,14 +1,18 @@
 		var app = angular.module("coding" , ['ngRoute' , 'ui.bootstrap']);
 
 	    // configure routes
-	    app.config(function($routeProvider , $locationProvider) {
+	    app.config(function($routeProvider , $locationProvider , $interpolateProvider) {
 
+	    	$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 		    // delete ! prefix in url 
 		    $locationProvider.hashPrefix("");
 		    // use the HTML5 History API
-        	$locationProvider.html5Mode(true);
+/*        	$locationProvider.html5Mode({
+			  enabled: true,
+			  requireBase: true
+			});*/
 
-	        $routeProvider
+/*	        $routeProvider
 	            .when('/', {
 	                controller  : 'homeController'
 	            })
@@ -36,7 +40,7 @@
 	            })
 	           	.when('/_=_' , {
 	                controller  : 'homeController'
-	            })
+	            })*/
 /*	            .otherwise({ redirectTo: '/login' });*/
 	    });
 
@@ -52,14 +56,14 @@
 				$scope.selectCategoryId = id;
 			}
 
-	        $http({
+/*	        $http({
 	            method: 'GET',
 	            url: '/listTechnologies'
 	        }).then(function successCallback(response) {
 	            $scope.categories = response.data;
 	        }, function errorCallback(err) {
 	            console.log(err);
-	        });
+	        });*/
 
 			// WATCHER ON URL
 			
@@ -233,18 +237,18 @@
 		});
 
 		app.controller("codeController" , function($scope , $location){
-
+			console.log('je suis dans le controller code');
 		});
 
 		app.controller("testsController" , function($scope , $location){
-
+			console.log('je suis dans le controller tests');
 		});
 
 		app.controller("databaseController" , function($scope , $location , $http){
-
+			console.log('je suis dans le controller database');
 			$scope.titleQuestions = 'Liste des questions';
 
-	        $http({
+/*	        $http({
 	            method: 'GET',
 	            url: '/listQuestions'
 	        }).then(function successCallback(response) {
@@ -252,7 +256,7 @@
 	            $scope.questions = response.data;
 	        }, function errorCallback(response) {
 	            console.log(response);
-	        });
+	        });*/
 
 	        $scope.sortType     = 'name'; // set the default sort type
   			$scope.sortReverse  = false;  // set the default sort order
@@ -278,6 +282,7 @@
 		});
 
 		app.controller("myaccountController" , function($scope , $location){
+			console.log('je suis dans le controller myaccount');
 			$scope.myaccountTitle = 'Account';
 			$scope.profileTitle = 'Profile';
 			$scope.updateProfile = 'Update profile';

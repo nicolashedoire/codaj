@@ -3,7 +3,8 @@
 {% block title %}{{parent()}} - Home{% endblock title %}
 
 {% block body %}
-	{% for category in items %}
+	<div ng-controller="homeController">
+			{% for category in items %}
 		<div class="col-sm-6 col-xs-12 col-md-3 col-lg-2">
 			<div class="thumbnail">
 				<img src="/img/technologies/{{category.slug}}.png" alt="{{category.name}}" title="{{category.name}}">
@@ -17,4 +18,5 @@
 			</div>
 		</div>
 	{% endfor %}
+	</div>
 {% endblock %}

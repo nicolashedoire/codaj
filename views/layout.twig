@@ -16,7 +16,7 @@
 			<link rel="stylesheet" href="/assets/css/style.css">
 		{% endblock %}
 	</head>
-	<body>
+	<body ng-app="coding" ng-controller="codingCtrl">
 		{% block nav %}
 			<nav class="navbar navbar-inverse">
 			  <div class="container-fluid">
@@ -152,8 +152,8 @@
 		<div class="container-fluid">
 			<div class="row">
 				<ol class="breadcrumb">
-				  <li><a href="#/">Home</a></li>
-				  <li><a href="#{{arianeUrl}}">{{arianeText}}</a></li>
+				  <li><a href="/">Home</a></li>
+				  <li><a href="{{arianeUrl}}">{{arianeText}}</a></li>
 				</ol>
 				{% block body %}
 				{% endblock %}

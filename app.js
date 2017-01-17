@@ -2,6 +2,7 @@ var env = process.env.NODE_ENV;
 var mysql = require('mysql');
 var path  = require('path');
 var passport = require('passport');
+var compression = require('compression');
 var FacebookStrategy = require('passport-facebook').Strategy;
 var session = require('express-session');
 var bodyParser    = require('body-parser');
@@ -11,6 +12,7 @@ var express = require('express');
 var config = require('./configuration/config');
 
 var app  = express();
+app.use(compression());
 var port = process.env.PORT || 3000;
 var connection;
 
@@ -133,7 +135,20 @@ app.get('/database' , (req, res , next) => {
 app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	console.log(req.user);
-	res.render('account/myaccount.twig');
+	res.render('account/myaccount.twig' , {
+/*		myaccountTitle : 'Account',
+		profileTitle : 'Profile',
+		updateProfile : 'Update profile',
+		paymentTitle : 'Payment method',
+		billingAdress : 'Billing Adress'*/
+	});
+});
+
+
+app.get('/subscriptions' , ensureAuthenticated , (req , res , next) => {
+	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+	console.log(req.user);
+	res.render('subscriptions/subscriptions.twig');
 });
 
 

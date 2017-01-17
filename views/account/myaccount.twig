@@ -1,7 +1,13 @@
-<div class="container mb20 rel">
-	<h1 class="mb15 fw600">{{myaccountTitle}}</h1>
+{% extends 'layout.twig' %}
+
+{% block title %}{{parent()}} - Subscriptions{% endblock title %}
+
+{% block body %}
+
+<div class="container mb20 rel" ng-controller="myaccountController">
+	<h1 class="mb15 fw600">{[{myaccountTitle}]}</h1>
 	<hr>
-	<h2 class="mt25 mb100 fs24">{{profileTitle}}</h2>
+	<h2 class="mt25 mb100 fs24">{[{profileTitle}]}</h2>
 	<div class="input-group input-group-custom">
 		<input type="text" class="form-control form-custom" aria-label="..." placeholder="Pseudo">
 	</div><!-- /input-group -->	
@@ -15,13 +21,13 @@
 		<input type="password" class="form-control form-custom" aria-label="..." placeholder="Password">
 	</div><!-- /input-group -->
 	<div class="input-group input-group-custom mt15">
-		<button class="btn btn-ui h55">{{updateProfile}}</button>
+		<button class="btn btn-ui h55">{[{updateProfile}]}</button>
 	</div><!-- /input-group -->
 
 	<hr>
 
 	<div>
-	<h3 class="mt25 mb100 fs24">{{paymentTitle}}</h3>
+	<h3 class="mt25 mb100 fs24">{[{paymentTitle}]}</h3>
 	<div class="w40 col-md-2 MB20">
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 30"><g id="Page-1" fill="none" fill-rule="evenodd"><g id="Group"><path id="Shape" fill="#253B80" d="M7.266,29.154 L7.789,25.832 L6.624,25.805 L1.061,25.805 L4.927,1.292 C4.939,1.218 4.978,1.149 5.035,1.1 C5.092,1.051 5.165,1.024 5.241,1.024 L14.621,1.024 C17.735,1.024 19.884,1.672 21.006,2.951 C21.532,3.551 21.867,4.178 22.029,4.868 C22.199,5.592 22.202,6.457 22.036,7.512 L22.024,7.589 L22.024,8.265 L22.55,8.563 C22.993,8.798 23.345,9.067 23.615,9.375 C24.065,9.888 24.356,10.54 24.479,11.313 C24.606,12.108 24.564,13.054 24.356,14.125 C24.116,15.357 23.728,16.43 23.204,17.308 C22.722,18.117 22.108,18.788 21.379,19.308 C20.683,19.802 19.856,20.177 18.921,20.417 C18.015,20.653 16.982,20.772 15.849,20.772 L15.119,20.772 C14.597,20.772 14.09,20.96 13.692,21.297 C13.293,21.641 13.029,22.111 12.948,22.625 L12.893,22.924 L11.969,28.779 L11.927,28.994 C11.916,29.062 11.897,29.096 11.869,29.119 C11.844,29.14 11.808,29.154 11.773,29.154 L7.266,29.154 Z"></path><path id="Shape" fill="#179BD7" d="M23.048,7.667 L23.048,7.667 L23.048,7.667 C23.02,7.84433007 22.988,8.02562282 22.952,8.21186893 C21.715,14.503619 17.483,16.6771507 12.078,16.6771507 L9.326,16.6771507 C8.665,16.6771507 8.108,17.1526727 8.005,17.7985901 L8.005,17.7985901 L8.005,17.7985901 L6.596,26.6512241 L6.197,29.1605932 C6.13,29.5846003 6.46,29.9669992 6.892,29.9669992 L11.773,29.9669992 C12.351,29.9669992 12.842,29.5509175 12.933,28.9862352 L12.981,28.7405488 L13.9,22.9629568 L13.959,22.6459422 C14.049,22.0792785 14.541,21.6631968 15.119,21.6631968 L15.849,21.6631968 C20.578,21.6631968 24.28,19.7611089 25.362,14.256942 C25.814,11.9575951 25.58,10.0376752 24.384,8.6873909 C24.022,8.28022521 23.573,7.94240648 23.048,7.667 Z"></path><path id="Shape" fill="#222D65" d="M21.754,7.151 C21.565,7.096 21.37,7.046 21.17,7.001 C20.969,6.957 20.763,6.918 20.551,6.884 C19.809,6.764 18.996,6.707 18.125,6.707 L10.773,6.707 C10.592,6.707 10.42,6.748 10.266,6.822 C9.927,6.985 9.675,7.306 9.614,7.699 L8.05,17.605 L8.005,17.894 C8.108,17.242 8.665,16.762 9.326,16.762 L12.078,16.762 C17.483,16.762 21.715,14.567 22.952,8.217 C22.989,8.029 23.02,7.846 23.048,7.667 C22.735,7.501 22.396,7.359 22.031,7.238 C21.941,7.208 21.848,7.179 21.754,7.151 Z"></path><path id="Shape" fill="#253B80" d="M9.614,7.699 C9.675,7.306 9.927,6.985 10.266,6.823 C10.421,6.749 10.592,6.708 10.773,6.708 L18.125,6.708 C18.996,6.708 19.809,6.765 20.551,6.885 C20.763,6.919 20.969,6.958 21.17,7.002 C21.37,7.047 21.565,7.097 21.754,7.152 C21.848,7.18 21.941,7.209 22.032,7.238 C22.397,7.359 22.736,7.502 23.049,7.667 C23.417,5.32 23.046,3.722 21.777,2.275 C20.378,0.682 17.853,0 14.622,0 L5.242,0 C4.582,0 4.019,0.48 3.917,1.133 L0.01,25.898 C-0.067,26.388 0.311,26.83 0.805,26.83 L6.596,26.83 L8.05,17.605 L9.614,7.699 Z"></path></g></g></svg>
 	</div>
@@ -35,7 +41,7 @@
 
 	<div class="clear mt25">
 	<hr>
-		<h4 class="mt25 mb100 fs24">{{billingAdress}}</h4>
+		<h4 class="mt25 mb100 fs24">{[{billingAdress}]}</h4>
 	<div class="input-group input-group-custom">
 		<input type="text" class="form-control form-custom" aria-label="..." placeholder="First name">
 	</div><!-- /input-group -->	
@@ -58,7 +64,9 @@
 		<input type="text" class="form-control form-custom" aria-label="..." placeholder="Country">
 	</div><!-- /input-group -->	
 	<div class="input-group input-group-custom mt15 mb25">
-		<button class="btn btn-ui h55">{{updateProfile}}</button>
+		<button class="btn btn-ui h55">{[{updateProfile}]}</button>
 	</div><!-- /input-group -->
 	</div>
 </div>
+
+{% endblock %}
