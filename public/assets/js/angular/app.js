@@ -5,42 +5,39 @@
 
 		    // delete ! prefix in url 
 		    $locationProvider.hashPrefix("");
+		    // use the HTML5 History API
+        	$locationProvider.html5Mode(true);
 
 	        $routeProvider
 	            .when('/', {
-	                templateUrl : 'views/home.html',
 	                controller  : 'homeController'
 	            })
 	            .when('/dashboard', {
-	                templateUrl : 'views/dashboard.html',
 	                controller  : 'dashboardController'
 	            })
 	            // route for the logout page
 	            .when('/code', {
-	            	templateUrl : 'views/code.html',
 	            	controller : 'codeController'
 	            })
 	            .when('/tests', {
-	                templateUrl  : 'views/tests.html',
 	                controller : 'testsController'
 	            })
 	            .when('/database' , {
-	                templateUrl : 'views/database.html',
 	                controller : 'databaseController'
 	            })
 	            .when('/myaccount' , {
-	                templateUrl : 'views/myaccount.html',
 	                controller : 'myaccountController'
 	            })
 	            .when('/subscriptions' , {
-	                templateUrl : 'views/subscriptions.html',
 	                controller : 'subscriptionsController'
 	            })
 	            .when('/technology/:itemName' , {
-	                templateUrl : 'views/detailsTechnology.html',
 	                controller : 'detailsTechnologyController'
 	            })
-	            .otherwise({ redirectTo: '/login' });
+	           	.when('/_=_' , {
+	                controller  : 'homeController'
+	            })
+/*	            .otherwise({ redirectTo: '/login' });*/
 	    });
 
 	    // controllers

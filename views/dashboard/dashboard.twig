@@ -1,0 +1,21 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{parent()}} - Home{% endblock title %}
+
+{% block body %}
+
+	<div class="row">
+		<div class="col-md-4">
+			<canvas id="myChart" width="200" height="200"></canvas>
+		</div>
+
+		<div class="col-md-4">
+			<canvas id="twoChart" width="200" height="200"></canvas>
+		</div>
+
+		<div class="col-md-4">
+			<canvas id="threeChart" width="200" height="200"></canvas>
+		</div>
+	</div>
+
+{% endblock %}

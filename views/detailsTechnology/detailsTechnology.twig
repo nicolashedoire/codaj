@@ -1,0 +1,51 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{parent()}} - Home{% endblock title %}
+
+{% block body %}
+
+    <div class="container">
+    	<h1 class="mb15">{{itemName}}</h1>
+    </div>
+
+
+    <div class="container">
+    	<div ng-hide="results" class="alert alert-danger" role="alert">
+    		<p>{{noResults}}</p>
+    	</div>
+    	<!-- <p ng-show="results" ng-repeat="question in questions">{{question.name}}</p> -->
+            {% for question in questions %}
+    			<div ng-show="results" class="col-lg-3 col-sm-6" ng-repeat="question in questions">
+                <div class="card hovercard">
+                    <div class="cardheader">
+    					<p>{{question.name}}</p>
+                    </div>
+                    <div class="avatar">
+                        <img alt="" src="/img/notifs/nicolas.png">
+                    </div>
+                    <div class="info">
+                        <div class="title">
+                            <a target="_blank" href="http://scripteden.com/">Hnhack</a>
+                        </div>
+                        <div class="desc">Passionate technology</div>
+                        <div class="desc">Curious developer</div>
+                    </div>
+                    <div class="bottom">
+                        <!-- <a class="btn btn-primary btn-twitter btn-sm" target="_blank" href="https://twitter.com/hnhack">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a class="btn btn-danger btn-sm" target="_blank" rel="publisher"
+                           href="https://plus.google.com/+nicolashedoire">
+                            <i class="fa fa-google-plus"></i>
+                        </a>
+                        <a class="btn btn-primary btn-sm" target="_blank" rel="publisher"
+                           href="https://www.facebook.com/hedoire">
+                            <i class="fa fa-facebook"></i>
+                        </a> -->
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
