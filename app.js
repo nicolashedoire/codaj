@@ -93,9 +93,13 @@ passport.use(new FacebookStrategy({
   }
 ));
 
-app.get('/' , (req, res , next) => {
+app.get('' , (req, res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	
+	var connected = false;
+	if (req.isAuthenticated()){
+		connected = true;
+	}
 	var query = 'SELECT id , name , slug , description from technologies';
 	connection.query( query , function(err , rows , fields) {
 		if(err) throw err;
@@ -108,7 +112,8 @@ app.get('/' , (req, res , next) => {
    			items: categories,
    			metiers : metiers,
    			buttonDiscover : 'Discover',
-   			Login : 'loogin'
+   			buttonTest : 'Test yourself',
+   			connected : connected
 			});
 		});
 	});
@@ -161,7 +166,6 @@ app.get('/subscriptions' , ensureAuthenticated , (req , res , next) => {
 
 
 // URL for Oauth facebook
-
 app.get('/auth/facebook' , passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback' ,  passport.authenticate('facebook', { 
@@ -170,7 +174,8 @@ app.get('/auth/facebook/callback' ,  passport.authenticate('facebook', {
   }),
   function(req, res) {
     res.redirect('/');
-  });
+  }
+);
 
 app.get('/logout' , ensureAuthenticated , (req, res , next) => {
   console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
