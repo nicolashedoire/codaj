@@ -122,6 +122,7 @@
 			</ol>
 		{% endblock %}
 		{% block voice %}
+			{% if connected == true %}
 			<div class="container" ng-hide="false">
 				<div class="col-md-1">
 					<div id="voice" class="round start">
@@ -154,6 +155,7 @@
 					<button class="btn btn-ui" ng-class="{disabled: bigData.postQuestion == false}" ng-click="postQuestion()">Post data</button>
 			</div>
 			<hr>
+		{% endif %}
 		{% endblock %}
 
 		<div class="container-fluid">
