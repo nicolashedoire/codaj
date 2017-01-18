@@ -99,9 +99,17 @@ app.get('/' , (req, res , next) => {
 	var query = 'SELECT id , name , slug , description from technologies';
 	connection.query( query , function(err , rows , fields) {
 		if(err) throw err;
-		res.render('home/homepage.twig', {
-   			items: rows,
-   			buttonDiscover : 'Discover'
+		var categories = rows;
+		var query = 'SELECT id , name , slug , description from metiers';
+		connection.query( query , function(err , rows , fields) {
+			if(err) throw err;
+			var metiers = rows
+			res.render('home/homepage.twig', {
+   			items: categories,
+   			metiers : metiers,
+   			buttonDiscover : 'Discover',
+   			Login : 'loogin'
+			});
 		});
 	});
 });
@@ -161,11 +169,10 @@ app.get('/auth/facebook/callback' ,  passport.authenticate('facebook', {
        failureRedirect: '/error' 
   }),
   function(req, res) {
-  	console.log(req);
     res.redirect('/');
   });
 
-app.get('/logout' , (req, res , next) => {
+app.get('/logout' , ensureAuthenticated , (req, res , next) => {
   console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
   req.logout();
   res.redirect('/');
