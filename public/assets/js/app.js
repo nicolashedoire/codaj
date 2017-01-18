@@ -17,7 +17,9 @@ function factoryBonjour(language){
 	return function(name , lastname){
   			// we get language to apply good language in the string 
         /*hello.innerHTML = lang[language].welcome + ' ' + name + ' ' + lastname;*/
-    		hello.innerHTML = lang[language].welcome + ' ' + name ;
+      if(hello !== null){
+        hello.innerHTML = lang[language].welcome + ' ' + name ;
+      }
   }
 }
 
