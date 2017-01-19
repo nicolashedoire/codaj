@@ -77,7 +77,8 @@ passport.deserializeUser(function(obj, done) {
 passport.use(new FacebookStrategy({
     clientID: config.facebook_api_key,
     clientSecret:config.facebook_api_secret ,
-    callbackURL: config.callback_url
+    callbackURL: config.callback_url,
+    profileFields: ['id', 'displayName', 'emails' , 'name', 'gender', 'picture.type(large)']
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
@@ -106,7 +107,7 @@ app.get('/' , (req, res , next) => {
 	   			buttonDiscover : 'Discover',
 	   			buttonTest : 'Test yourself',
 	   			connected : req.session.connected , 
-	   			username : req.session.username
+	   			username : req.session.username,
 			});
 		});
 	});
@@ -198,23 +199,30 @@ app.get('/success', function(req, res, next) {
          /*console.log(profile.id , profile.displayName);*/
          var query = 'SELECT id, facebook_id , role , fullname FROM utilisateurs WHERE facebook_id = ?';
          var user = '';
-         connection.query( query  , req.user.id , (err , rows , fields) => {
-         	if(err) throw err;
-         	// add id in database in profile data
-         	req.session.iddb = rows[0].id;
-         	console.log(req.session);
-         	user = rows[0].fullname;
+         var facebook_id = parseInt(req.user.id);
+         connection.query( query  , facebook_id , (err , rows , fields) => {
+         	if(err){
+         		console.log(err);
+         		return;
+         	}
          	if(rows.length === 0){
          		console.log('Creation du compte en cours');
          		var query = 'INSERT INTO utilisateurs set ?';
          		var account = {
-         			facebook_id : profile.id,
-         			fullname : profile.displayName
+         			facebook_id : req.user.id,
+         			fullname : req.user.displayName,
+         			gender : req.user.gender,
+         			name : req.user.name.familyName,
+         			lastname : req.user.name.givenName,
+         			avatar_url : req.user.photos[0].value
          		}
          		connection.query( query , account , (err , result) => {
          			if(err) throw err;
          		});
          	}else{
+         		// add id in database in profile data
+         		req.session.iddb = rows[0].id;
+         		user = rows[0].fullname;
          		console.log('jai trouvé le compte de : ' + user);
          	}
          	req.session.username = req.user.displayName;
