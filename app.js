@@ -113,9 +113,9 @@ passport.use(new FacebookStrategy({
 
 app.get('/' , (req, res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
-	var connected = false;
+	req.session.connected = false;
 	if (req.isAuthenticated()){
-		connected = true;
+		req.session.connected = true;
 	}
 	var query = 'SELECT id , name , slug , description from technologies';
 	connection.query( query , function(err , rows , fields) {
@@ -130,7 +130,7 @@ app.get('/' , (req, res , next) => {
 	   			metiers : metiers,
 	   			buttonDiscover : 'Discover',
 	   			buttonTest : 'Test yourself',
-	   			connected : connected , 
+	   			connected : req.session.connected , 
 	   			username : req.session.username
 			});
 		});
@@ -139,17 +139,26 @@ app.get('/' , (req, res , next) => {
 
 app.get('/dashboard' , (req, res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
-	res.render('dashboard/dashboard.twig');
+	res.render('dashboard/dashboard.twig' , {
+		connected : req.session.connected , 
+	   	username : req.session.username
+	});
 });
 
 app.get('/code' , (req, res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
-	res.render('code/code.twig');
+	res.render('code/code.twig' , {
+		connected : req.session.connected , 
+	   	username : req.session.username
+	});
 });
 
 app.get('/tests' , (req, res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
-	res.render('tests/tests.twig');
+	res.render('tests/tests.twig' , {
+		connected : req.session.connected , 
+	   	username : req.session.username
+	});
 });
 
 app.get('/database' , (req, res , next) => {
@@ -158,7 +167,9 @@ app.get('/database' , (req, res , next) => {
 	connection.query( query , function(err , rows , fields) {
 		if(err) throw err;
 		res.render('database/database.twig' , {
-			questions : rows
+			questions : rows,
+			connected : req.session.connected , 
+	   		username : req.session.username
 		});
 	});
 });
@@ -171,13 +182,18 @@ app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
 		updateProfile : 'Update profile',
 		paymentTitle : 'Payment method',
 		billingAdress : 'Billing Adress'*/
+		connected : req.session.connected , 
+	   	username : req.session.username
 	});
 });
 
 
 app.get('/subscriptions' , ensureAuthenticated , (req , res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
-	res.render('subscriptions/subscriptions.twig');
+	res.render('subscriptions/subscriptions.twig' , {
+		connected : req.session.connected , 
+	   	username : req.session.username
+	});
 });
 
 
@@ -223,7 +239,9 @@ app.get('/technology/:itemName' , (req , res , next) => {
 		if(err) throw err;
 		res.render('detailsTechnology/detailsTechnology.twig' , {
 			dirname: __dirname,
-			questions : rows
+			questions : rows, 
+			connected : req.session.connected , 
+	   		username : req.session.username
 		});
 	});
 });
