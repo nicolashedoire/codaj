@@ -59,7 +59,7 @@
 			        		<a href="#">
 								<div class="notif-div">
 									<a title="title" href="#" class="notif-avatarLink">
-										<img alt="img" src="img/notifs/nicolas.png" class="notif-avatarImg">
+										<img alt="img" src="/img/notifs/nicolas.png" class="notif-avatarImg">
 									</a>
 									<div class="notif-divUser">
 										<div class="notif-divName">
@@ -118,7 +118,9 @@
 			</nav>
 			<ol class="breadcrumb">
 				<li><a href="/">Home</a></li>
-				<li><a href="{{arianeUrl}}">{{arianeText}}</a></li>
+				{% if arianeText != false %}
+					<li>{{arianeText}}</li>
+				{% endif %}
 			</ol>
 		{% endblock %}
 		{% block voice %}

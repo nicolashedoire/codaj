@@ -108,6 +108,7 @@ app.get('/' , (req, res , next) => {
 	   			buttonTest : 'Test yourself',
 	   			connected : req.session.connected , 
 	   			username : req.session.username,
+	   			arianeText : false
 			});
 		});
 	});
@@ -117,7 +118,8 @@ app.get('/dashboard' , (req, res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('dashboard/dashboard.twig' , {
 		connected : req.session.connected , 
-	   	username : req.session.username
+	   	username : req.session.username ,
+	   	arianeText : req.url.substring(1)
 	});
 });
 
@@ -125,7 +127,8 @@ app.get('/code' , (req, res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('code/code.twig' , {
 		connected : req.session.connected , 
-	   	username : req.session.username
+	   	username : req.session.username , 
+	   	arianeText : req.url.substring(1)
 	});
 });
 
@@ -133,7 +136,8 @@ app.get('/tests' , (req, res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('tests/tests.twig' , {
 		connected : req.session.connected , 
-	   	username : req.session.username
+	   	username : req.session.username , 
+	   	arianeText : req.url.substring(1)
 	});
 });
 
@@ -145,7 +149,8 @@ app.get('/database' , (req, res , next) => {
 		res.render('database/database.twig' , {
 			questions : rows,
 			connected : req.session.connected , 
-	   		username : req.session.username
+	   		username : req.session.username,
+	   		arianeText : req.url.substring(1)
 		});
 	});
 });
@@ -159,7 +164,8 @@ app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
 		paymentTitle : 'Payment method',
 		billingAdress : 'Billing Adress'*/
 		connected : req.session.connected , 
-	   	username : req.session.username
+	   	username : req.session.username,
+	   	arianeText : req.url.substring(1)
 	});
 });
 
@@ -167,7 +173,8 @@ app.get('/subscriptions' , ensureAuthenticated , (req , res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('subscriptions/subscriptions.twig' , {
 		connected : req.session.connected , 
-	   	username : req.session.username
+	   	username : req.session.username ,
+	   	arianeText : req.url.substring(1)
 	});
 });
 
@@ -243,15 +250,19 @@ function ensureAuthenticated(req, res, next) {
 // End Oauth facebook
 
 app.get('/technology/:itemName' , (req , res , next) => {
+		console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	// condition for local only
 	var query = 'SELECT q.id , q.name FROM technologies as t inner join questions as q on q.tech_id = t.id WHERE t.slug=?';
 	connection.query( query , req.params.itemName , function(err , rows , fields) {
 		if(err) throw err;
+		var arianeText = req.url.substring(1);
+		arianeText = arianeText.replace('/' , ' / ');
 		res.render('detailsTechnology/detailsTechnology.twig' , {
 			dirname: __dirname,
 			questions : rows, 
 			connected : req.session.connected , 
-	   		username : req.session.username
+	   		username : req.session.username,
+	   		arianeText : arianeText
 		});
 	});
 });
