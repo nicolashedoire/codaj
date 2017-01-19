@@ -134,7 +134,7 @@
 						</span>
 					</div>
 				</div>
-				<div class="col-md-11">
+				<div class="col-md-7">
 				    <div class="input-group">
 					    <input type="text" class="form-control form-search" focus="{[{bigData.postQuestion}]}" ng-init="question=''" ng-model="question" aria-label="..." placeholder="{[{bigData.searchPlaceholder}]}">
 					    <div class="input-group-btn dropdown" uib-dropdown>
@@ -151,11 +151,12 @@
 					</div>
 				</div>
 
-				<div class="col-md-12 mt10" id="module"></div>
+				<div class="col-md-4 mt10" id="module">
 		  			<div class="btn-group" data-toggle="buttons">
 				        <label class="btn btn-ui" ng-model="bigData.postQuestion" uib-btn-checkbox>Insert question</label>
 					</div>
 					<button class="btn btn-ui-white" ng-class="{disabled: bigData.postQuestion == false}" ng-click="postQuestion()">Post data</button>
+				</div>
 			</div>
 
 			<div class="modal-demo">
