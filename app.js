@@ -73,8 +73,6 @@ passport.deserializeUser(function(obj, done) {
 	done(null, obj);
 });
 
-
-
 /*config is our configuration variable.*/
 passport.use(new FacebookStrategy({
     clientID: config.facebook_api_key,
@@ -113,9 +111,8 @@ passport.use(new FacebookStrategy({
   }
 ));
 
-app.get('' , (req, res , next) => {
+app.get('/' , (req, res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
-	
 	var connected = false;
 	if (req.isAuthenticated()){
 		connected = true;
@@ -129,11 +126,12 @@ app.get('' , (req, res , next) => {
 			if(err) throw err;
 			var metiers = rows
 			res.render('home/homepage.twig', {
-   			items: categories,
-   			metiers : metiers,
-   			buttonDiscover : 'Discover',
-   			buttonTest : 'Test yourself',
-   			connected : connected
+	   			items: categories,
+	   			metiers : metiers,
+	   			buttonDiscover : 'Discover',
+	   			buttonTest : 'Test yourself',
+	   			connected : connected , 
+	   			username : req.session.username
 			});
 		});
 	});
@@ -202,6 +200,7 @@ app.get('/logout' , ensureAuthenticated , (req, res , next) => {
 });
 
 app.get('/success', function(req, res, next) {
+   req.session.username = req.user.displayName;
    res.redirect('/');
 });
 
@@ -255,7 +254,6 @@ app.get('/listTechnologies' , (req , res) => {
  		res.send(rows);
  	});
  });
-
 
 app.listen(port , () =>{
 	console.log('works on port : ' + process.env.PORT);

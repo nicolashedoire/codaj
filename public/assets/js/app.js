@@ -33,4 +33,5 @@ selectLanguage.onchange = function(){
   sayHello(this.options[this.selectedIndex].value , 'nicolas' , 'hedoire');
 }
 
-sayHello('en' , 'nicolas' , 'hedoire');
+/*sayHello('en' , 'nicolas' , 'hedoire');
+*/
