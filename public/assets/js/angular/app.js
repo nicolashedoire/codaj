@@ -81,42 +81,6 @@
 		        	$scope.arianeText = path;
 		        }
 		    });
-
-		    $scope.postQuestion = function(){
-		    	if($scope.bigData.postQuestion && $scope.question !== ''){
-			       $http({
-			       		url: 'insertQuestion',
-						method: 'POST',
-						data: { 
-							question : $scope.question ,
-							technologieId : $scope.selectCategoryId
-						}
-				   }).then((response) => {
-				    	console.log(response); 
-					} , function(error){
-						console.log(error);
-					});
-		    	}
-		    }
-
-		    $scope.bigData = {};
-			$scope.bigData.postQuestion = false;
-			$scope.bigData.getResponse = false;
-			$scope.bigData.searchPlaceholder = 'Posez une question et choisissez une catégorie';
-
-			$scope.$watch('bigData.postQuestion ', function(newValue, oldValue){
-				$scope.question = '';
-				if(newValue){
-					$scope.bigData.searchPlaceholder = 'Poster une question';
-				}else{
-					$scope.bigData.searchPlaceholder = 'Posez une question et choisissez une catégorie';
-				}
-			});
-
-			$scope.$watch('question' , function(val){
-				/*console.log(val);*/
-				// TODO for validate string
-			});
 		});
 
 		app.controller("homeController" , function($scope , $location){
@@ -315,9 +279,48 @@
 		});
 
 
-app.controller('ModalDemoCtrl', function ($uibModal, $log, $document) {
+app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $document) {
+
+	$scope.postQuestion = function(){
+		if($scope.bigData.postQuestion && $scope.question !== ''){
+			$http({
+			    url: 'insertQuestion',
+				method: 'POST',
+				data: { 
+					question : $scope.question ,
+					technologieId : $scope.selectCategoryId
+				}
+			}).then((response) => {
+				console.log(response); 
+				} , function(error){
+					console.log(error);
+			});
+		}
+	}
+
+	$scope.bigData = {};
+	$scope.bigData.postQuestion = false;
+	$scope.bigData.getResponse = false;
+	$scope.bigData.searchPlaceholder = 'Posez une question et choisissez une catégorie';
+
+	$scope.$watch('bigData.postQuestion ', function(newValue, oldValue){
+		$scope.question = '';
+		if(newValue){
+			$scope.bigData.searchPlaceholder = 'Poster une question';
+		}else{
+			$scope.bigData.searchPlaceholder = 'Posez une question et choisissez une catégorie';
+		}
+	});
+
+	$scope.$watch('question' , function(val){
+		/*console.log(val);*/
+		// TODO for validate string
+	});
+
+
   var $ctrl = this;
   $ctrl.items = ['item1', 'item2', 'item3'];
+  $ctrl.createcategory = 'Create new category';
 
   $ctrl.animationsEnabled = true;
 
@@ -336,6 +339,9 @@ app.controller('ModalDemoCtrl', function ($uibModal, $log, $document) {
       resolve: {
         items: function () {
           return $ctrl.items;
+        },
+        createcategory : function () {
+        	return $ctrl.createcategory;
         }
       }
     });
@@ -354,6 +360,9 @@ app.controller('ModalDemoCtrl', function ($uibModal, $log, $document) {
       resolve: {
         items: function () {
           return $ctrl.items;
+        },
+        createcategory : function () {
+        	return $ctrl.createcategory;
         }
       }
     });
@@ -397,9 +406,10 @@ app.controller('ModalDemoCtrl', function ($uibModal, $log, $document) {
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-app.controller('ModalInstanceCtrl', function ($uibModalInstance, items) {
+app.controller('ModalInstanceCtrl', function ($uibModalInstance, items , createcategory) {
   var $ctrl = this;
   $ctrl.items = items;
+  $ctrl.createcategory = createcategory;
   $ctrl.selected = {
     item: $ctrl.items[0]
   };
@@ -427,6 +437,7 @@ app.component('modalComponent', {
 
     $ctrl.$onInit = function () {
       $ctrl.items = $ctrl.resolve.items;
+      $ctrl.createcategory = $ctrl.resolve.createcategory;
       $ctrl.selected = {
         item: $ctrl.items[0]
       };

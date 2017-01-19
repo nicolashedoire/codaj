@@ -108,6 +108,7 @@ app.get('/' , (req, res , next) => {
 	   			buttonTest : 'Test yourself',
 	   			connected : req.session.connected , 
 	   			username : req.session.username,
+	   			avatar : req.session.avatar,
 	   			arianeText : false
 			});
 		});
@@ -119,6 +120,7 @@ app.get('/dashboard' , (req, res , next) => {
 	res.render('dashboard/dashboard.twig' , {
 		connected : req.session.connected , 
 	   	username : req.session.username ,
+	   	avatar : req.session.avatar,
 	   	arianeText : req.url.substring(1)
 	});
 });
@@ -128,6 +130,7 @@ app.get('/code' , (req, res , next) => {
 	res.render('code/code.twig' , {
 		connected : req.session.connected , 
 	   	username : req.session.username , 
+	   	avatar : req.session.avatar,
 	   	arianeText : req.url.substring(1)
 	});
 });
@@ -137,6 +140,7 @@ app.get('/tests' , (req, res , next) => {
 	res.render('tests/tests.twig' , {
 		connected : req.session.connected , 
 	   	username : req.session.username , 
+	   	avatar : req.session.avatar,
 	   	arianeText : req.url.substring(1)
 	});
 });
@@ -150,6 +154,7 @@ app.get('/database' , (req, res , next) => {
 			questions : rows,
 			connected : req.session.connected , 
 	   		username : req.session.username,
+	   		avatar : req.session.avatar,
 	   		arianeText : req.url.substring(1)
 		});
 	});
@@ -165,6 +170,7 @@ app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
 		billingAdress : 'Billing Adress'*/
 		connected : req.session.connected , 
 	   	username : req.session.username,
+	   	avatar : req.session.avatar,
 	   	arianeText : req.url.substring(1)
 	});
 });
@@ -174,6 +180,7 @@ app.get('/subscriptions' , ensureAuthenticated , (req , res , next) => {
 	res.render('subscriptions/subscriptions.twig' , {
 		connected : req.session.connected , 
 	   	username : req.session.username ,
+	   	avatar : req.session.avatar,
 	   	arianeText : req.url.substring(1)
 	});
 });
@@ -204,7 +211,7 @@ app.get('/success', function(req, res, next) {
       {
          //Further code of Database.
          /*console.log(profile.id , profile.displayName);*/
-         var query = 'SELECT id, facebook_id , role , fullname FROM utilisateurs WHERE facebook_id = ?';
+         var query = 'SELECT id, facebook_id , role , fullname , avatar_url FROM utilisateurs WHERE facebook_id = ?';
          var user = '';
          var facebook_id = parseInt(req.user.id);
          connection.query( query  , facebook_id , (err , rows , fields) => {
@@ -233,6 +240,7 @@ app.get('/success', function(req, res, next) {
          		console.log('jai trouvé le compte de : ' + user);
          	}
          	req.session.username = req.user.displayName;
+         	req.session.avatar = req.user.photos[0].value;
    			res.redirect('/');
          });
       }
@@ -262,6 +270,7 @@ app.get('/technology/:itemName' , (req , res , next) => {
 			questions : rows, 
 			connected : req.session.connected , 
 	   		username : req.session.username,
+	   		avatar : req.session.avatar,
 	   		arianeText : arianeText
 		});
 	});

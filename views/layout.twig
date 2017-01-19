@@ -100,7 +100,8 @@
 			          </ul>
   					</li>
 			        <li class="dropdown" uib-dropdown>
-  						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>
+  						<a href="#" class="dropdown-toggle menu-avatar-drop" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" uib-dropdown-toggle>
+  						<img src="{{avatar}}" width="30" class="img-circle avatar-menu">
   							<span id="hello">{{username}}</span>
   							<span class="caret"></span>
   						</a>
@@ -154,13 +155,13 @@
 		  			<div class="btn-group" data-toggle="buttons">
 				        <label class="btn btn-ui" ng-model="bigData.postQuestion" uib-btn-checkbox>Insert question</label>
 					</div>
-					<button class="btn btn-ui" ng-class="{disabled: bigData.postQuestion == false}" ng-click="postQuestion()">Post data</button>
+					<button class="btn btn-ui-white" ng-class="{disabled: bigData.postQuestion == false}" ng-click="postQuestion()">Post data</button>
 			</div>
 
 			<div class="modal-demo">
 			    <script type="text/ng-template" id="myModalContent.html">
 			        <div class="modal-header">
-			            <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
+			            <h3 class="modal-title" id="modal-title">{[{$ctrl.createcategory}]}</h3>
 			        </div>
 			        <div class="modal-body" id="modal-body">
 			            <ul>
