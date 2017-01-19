@@ -119,13 +119,13 @@
 			<ol class="breadcrumb">
 				<li><a href="/">Home</a></li>
 				{% if arianeText != false %}
-					<li>{{arianeText}}</li>
+					<li class="blue">{{arianeText}}</li>
 				{% endif %}
 			</ol>
 		{% endblock %}
 		{% block voice %}
 			{% if connected == true %}
-			<div class="container" ng-hide="false">
+			<div class="container" ng-hide="false" ng-controller="ModalDemoCtrl as $ctrl" >
 				<div class="col-md-1">
 					<div id="voice" class="round start">
 						<span>
@@ -144,7 +144,7 @@
 					        <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
 					          <li ng-repeat="category in categories" ng-click="selectCategory(category.name , category.id)"><a class="pointer">{[{category.name}]}</a></li>
 					          <li role="separator" class="divider"></li>
-					          <li><a href="#">Add new category</a></li>
+					          <li><a href ng-click="$ctrl.open()">Add new category</a></li>
 					        </ul>
 					    </div>
 					</div>
@@ -156,6 +156,30 @@
 					</div>
 					<button class="btn btn-ui" ng-class="{disabled: bigData.postQuestion == false}" ng-click="postQuestion()">Post data</button>
 			</div>
+
+			<div class="modal-demo">
+			    <script type="text/ng-template" id="myModalContent.html">
+			        <div class="modal-header">
+			            <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
+			        </div>
+			        <div class="modal-body" id="modal-body">
+			            <ul>
+			                <li ng-repeat="item in $ctrl.items">
+			                    <a href="#" ng-click="$event.preventDefault(); $ctrl.selected.item = item">{[{ item }]}</a>
+			                </li>
+			            </ul>
+			            Selected: <b>{[{ $ctrl.selected.item }]}</b>
+			        </div>
+			        <div class="modal-footer">
+			            <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+			            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+			        </div>
+			    </script>
+			    <div ng-show="$ctrl.selected">Selection from a modal: {[{ $ctrl.selected }]}</div>
+			    <div class="modal-parent">
+			    </div>
+			</div>
+
 			<hr>
 		{% endif %}
 		{% endblock %}
@@ -210,9 +234,11 @@
 			<script type="text/javascript" src="/components/angular/angular.js"></script>
 			<script type="text/javascript" src="/components/angular-route/angular-route.js"></script>
 			<script type="text/javascript" src="/components/angular-bootstrap/ui-bootstrap.js"></script>
+			<script type="text/javascript" src="/components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 			<script type="text/javascript" src="/components/chart.js/dist/Chart.js"></script>
 			<script type="text/javascript" src="/assets/js/app.js"></script>
 			<script type="text/javascript" src="/assets/js/angular/app.js"></script>
+			     <!-- The actual modal template, just a bit o bootstrap -->
 		{% endblock %}
 	</body>
 </html>
