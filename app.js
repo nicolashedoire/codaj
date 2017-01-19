@@ -81,31 +81,6 @@ passport.use(new FacebookStrategy({
   },
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-      //Check whether the User exists or not using profile.id
-      if(config.use_database==='true')
-      {
-         //Further code of Database.
-         /*console.log(profile.id , profile.displayName);*/
-         var query = 'SELECT facebook_id , role , fullname FROM utilisateurs WHERE facebook_id = ?';
-         var user = '';
-         connection.query( query  , profile.id , (err , rows , fields) => {
-         	if(err) throw err;
-         	user = rows[0].fullname;
-         	if(rows.length === 0){
-         		console.log('Creation du compte en cours');
-         		var query = 'INSERT INTO utilisateurs set ?';
-         		var account = {
-         			facebook_id : profile.id,
-         			fullname : profile.displayName
-         		}
-         		connection.query( query , account , (err , result) => {
-         			if(err) throw err;
-         		});
-         	}else{
-         		console.log('jai trouvé le compte de : ' + user);
-         	}
-         });
-      }
       return done(null, profile);
     });
   }
@@ -187,7 +162,6 @@ app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
 	});
 });
 
-
 app.get('/subscriptions' , ensureAuthenticated , (req , res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('subscriptions/subscriptions.twig' , {
@@ -196,17 +170,13 @@ app.get('/subscriptions' , ensureAuthenticated , (req , res , next) => {
 	});
 });
 
-
 // URL for Oauth facebook
 app.get('/auth/facebook' , passport.authenticate('facebook'));
 
 app.get('/auth/facebook/callback' ,  passport.authenticate('facebook', { 
        successRedirect : '/success', 
        failureRedirect: '/error' 
-  }),
-  function(req, res) {
-    res.redirect('/');
-  }
+  })
 );
 
 app.get('/logout' , ensureAuthenticated , (req, res , next) => {
@@ -216,9 +186,41 @@ app.get('/logout' , ensureAuthenticated , (req, res , next) => {
   res.redirect('/');
 });
 
+
+// Comment trouver la position d'un mot dans une chaîne de caractère ?
+
 app.get('/success', function(req, res, next) {
-   req.session.username = req.user.displayName;
-   res.redirect('/');
+      //Check whether the User exists or not using profile.id
+      var iddb = '';
+      if(config.use_database==='true')
+      {
+         //Further code of Database.
+         /*console.log(profile.id , profile.displayName);*/
+         var query = 'SELECT id, facebook_id , role , fullname FROM utilisateurs WHERE facebook_id = ?';
+         var user = '';
+         connection.query( query  , req.user.id , (err , rows , fields) => {
+         	if(err) throw err;
+         	// add id in database in profile data
+         	req.session.iddb = rows[0].id;
+         	console.log(req.session);
+         	user = rows[0].fullname;
+         	if(rows.length === 0){
+         		console.log('Creation du compte en cours');
+         		var query = 'INSERT INTO utilisateurs set ?';
+         		var account = {
+         			facebook_id : profile.id,
+         			fullname : profile.displayName
+         		}
+         		connection.query( query , account , (err , result) => {
+         			if(err) throw err;
+         		});
+         	}else{
+         		console.log('jai trouvé le compte de : ' + user);
+         	}
+         	req.session.username = req.user.displayName;
+   			res.redirect('/');
+         });
+      }
 });
 
 app.get('/error', function(req, res, next) {
@@ -226,7 +228,7 @@ app.get('/error', function(req, res, next) {
 });
 
 function ensureAuthenticated(req, res, next) {
-	console.log(req.isAuthenticated());
+  console.log(req.isAuthenticated());
   if (req.isAuthenticated()) { return next(); }
 }
 
@@ -247,22 +249,22 @@ app.get('/technology/:itemName' , (req , res , next) => {
 });
 
 app.post('/insertQuestion' , (req, res , next) => {
-	console.log(req.body.question);
-	console.log(req.body.technologieId);
+	console.log('-------------------------------');
+	console.log(req.body.question , req.body.technologieId , req.session.iddb , req.session.username);
 	var post = {
 		name 	: req.body.question ,
-		tech_id : parseInt(req.body.technologieId)
+		tech_id : parseInt(req.body.technologieId),
+		user_id : req.session.iddb
 	}
 	// condition for local only
-	if(port === 3000){
-		connection.query('INSERT INTO questions SET ?' , post , (err , result) =>{
-			if(!err){
-				res.end();
-			}
-		});
-	}else{
-		res.end([]);
-	}
+	var query = 'INSERT INTO questions SET ?';
+	connection.query(query , post , (err , result) =>{
+		if(!err){
+			res.end('ok');
+		}else{
+			console.log(err);
+		}
+	});
 });
 
 app.get('/listTechnologies' , (req , res) => {
