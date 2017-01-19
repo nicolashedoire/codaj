@@ -66,14 +66,14 @@ app.use(passport.session());
 
 // Passport session setup.
 passport.serializeUser(function(user, done) {
-	console.log(user);
 	done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
-	console.log(obj);
 	done(null, obj);
 });
+
+
 
 /*config is our configuration variable.*/
 passport.use(new FacebookStrategy({
@@ -87,6 +87,26 @@ passport.use(new FacebookStrategy({
       if(config.use_database==='true')
       {
          //Further code of Database.
+         /*console.log(profile.id , profile.displayName);*/
+         var query = 'SELECT facebook_id , role , fullname FROM utilisateurs WHERE facebook_id = ?';
+         var user = '';
+         connection.query( query  , profile.id , (err , rows , fields) => {
+         	if(err) throw err;
+         	user = rows[0].fullname;
+         	if(rows.length === 0){
+         		console.log('Creation du compte en cours');
+         		var query = 'INSERT INTO utilisateurs set ?';
+         		var account = {
+         			facebook_id : profile.id,
+         			fullname : profile.displayName
+         		}
+         		connection.query( query , account , (err , result) => {
+         			if(err) throw err;
+         		});
+         	}else{
+         		console.log('jai trouvé le compte de : ' + user);
+         	}
+         });
       }
       return done(null, profile);
     });
@@ -147,7 +167,6 @@ app.get('/database' , (req, res , next) => {
 
 app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
-	console.log(req.user);
 	res.render('account/myaccount.twig' , {
 /*		myaccountTitle : 'Account',
 		profileTitle : 'Profile',
@@ -160,7 +179,6 @@ app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
 
 app.get('/subscriptions' , ensureAuthenticated , (req , res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
-	console.log(req.user);
 	res.render('subscriptions/subscriptions.twig');
 });
 
@@ -234,9 +252,6 @@ app.get('/listTechnologies' , (req , res) => {
  	var query = 'SELECT id , name , slug  from technologies';
  	connection.query( query , function(err , rows , fields) {
  		if(err) throw err;
- 		for(var i in rows){
- 			console.log('Post technologies : ' , rows[i].name);
- 		}
  		res.send(rows);
  	});
  });
