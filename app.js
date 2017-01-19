@@ -56,7 +56,7 @@ app.set("twig options", {
 
 app.use(session({
     secret: 'cookie_secret',
-    name: 'cookie_name',
+    name: 'session',
     resave: true,
     saveUninitialized: true
 }));
@@ -195,6 +195,7 @@ app.get('/auth/facebook/callback' ,  passport.authenticate('facebook', {
 
 app.get('/logout' , ensureAuthenticated , (req, res , next) => {
   console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+  req.session.destroy();
   req.logout();
   res.redirect('/');
 });
