@@ -116,6 +116,11 @@ app.get('/' , (req, res , next) => {
 });
 
 app.get('/dashboard' , (req, res , next) => {
+	req.session.connected = false;
+	if (req.isAuthenticated()){
+		req.session.connected = true;
+	}
+
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('dashboard/dashboard.twig' , {
 		connected : req.session.connected , 
@@ -126,6 +131,11 @@ app.get('/dashboard' , (req, res , next) => {
 });
 
 app.get('/code' , (req, res , next) => {
+	req.session.connected = false;
+	if (req.isAuthenticated()){
+		req.session.connected = true;
+	}
+
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('code/code.twig' , {
 		connected : req.session.connected , 
@@ -136,6 +146,12 @@ app.get('/code' , (req, res , next) => {
 });
 
 app.get('/tests' , (req, res , next) => {
+
+	req.session.connected = false;
+	if (req.isAuthenticated()){
+		req.session.connected = true;
+	}
+
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('tests/tests.twig' , {
 		connected : req.session.connected , 
@@ -146,16 +162,28 @@ app.get('/tests' , (req, res , next) => {
 });
 
 app.get('/database' , (req, res , next) => {
+
+	req.session.connected = false;
+	if (req.isAuthenticated()){
+		req.session.connected = true;
+	}
+	
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
-	var query = 'SELECT q.id, q.name as questionName , q.tech_id , t.name as technoName from questions as q INNER JOIN technologies as t on t.id = q.tech_id';
+	var query = 'SELECT q.id, q.name as questionName , q.tech_id , t.name as technoName from questions as q INNER JOIN technologies as t on t.id = q.tech_id LIMIT 10 OFFSET 0';
 	connection.query( query , function(err , rows , fields) {
 		if(err) throw err;
-		res.render('database/database.twig' , {
-			questions : rows,
-			connected : req.session.connected , 
-	   		username : req.session.username,
-	   		avatar : req.session.avatar,
-	   		arianeText : req.url.substring(1)
+		var query = 'SELECT count(id) as total from questions';
+		var questions = rows;
+		connection.query( query , function(err , rows , fields) {
+			console.log(rows[0].total);
+			res.render('database/database.twig' , {
+				questions : questions,
+				connected : req.session.connected , 
+		   		username : req.session.username,
+		   		avatar : req.session.avatar,
+		   		total : rows[0].total,
+		   		arianeText : req.url.substring(1)
+			});
 		});
 	});
 });
