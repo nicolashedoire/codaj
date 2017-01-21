@@ -44,12 +44,16 @@
 	    // controllers
 	    // 
 		app.controller("codingCtrl" , function($scope , $location , $http , $uibModal){
+
+
 			$scope.selectedCategory = "Categories";
 			$scope.selectCategoryId = 0;
+
 			$scope.selectCategory = function(category , id){
 				$scope.selectedCategory = category;
 				$scope.selectCategoryId = id;
 			}
+
 	        $http({
 	            method: 'GET',
 	            url: '/listTechnologies'
@@ -63,6 +67,7 @@
 			
 			$scope.arianeUrl = '';
 			$scope.arianeText = '';
+
 		    $scope.$watch(function(){
 		       return $location.path(); 
 		    }, function(newPath){
@@ -278,6 +283,146 @@
 
 
 app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $document) {
+
+			var words = [];
+			var recognizer;
+			var double = false;   // => marker double
+			var stopped = false;  // => marker stop recognition
+			var stop = false;     // => marker mot stop
+
+			// ajouter un timer qui stoppe la recognition a 1 min 30
+
+			recognition = {
+			        create : function(){
+			          window.SpeechRecognition = window.SpeechRecognition       ||
+			                                     window.webkitSpeechRecognition ||
+			                                     null;
+			          try{
+			            recognizer = new window.SpeechRecognition();
+			            recognizer.continuous = true;
+			            recognizer.interimResults = false;
+			            recognizer.maxAlternatives = 0;
+			            recognizer.interimResults = 'interim';
+			            return recognizer;            
+			          }catch(e){
+			            console.log(e);
+			          }
+			        },
+
+			        init : function($scope){
+			          var that  = this;
+			          this.create();
+			          var res = '';
+			          recognizer.onresult = function(event) {
+			            res = '';
+			            /*$('#module').html('');*/
+			            for (var i = event.resultIndex; i < event.results.length; i++) {
+			              if (event.results[i].isFinal) {
+			                res += event.results[i][0].transcript;
+			              } else {
+			                res += event.results[i][0].transcript;
+			              }
+			            }
+			            var items = []; 
+			            items = res.split(' ');
+			            if(!double){
+			              if(items.indexOf('stop') > -1){
+			                stop = true;
+			                double = true;
+			                console.log('pass 1');
+			                that.stop();
+			              }
+			            }
+			            if(!double){
+			              if(!that.checkDouble(res , words)){
+			              	console.log('----');
+			                console.log(items);
+			                console.log(res);
+			                words.push(res);
+			             	return $scope.reco = res;
+			                console.log('pass 2');
+			                that.callback(res);
+			              }else{
+			                console.log('deja present');
+			              }
+			            }
+			          }
+			          recognizer.onsoundend = function(event) {
+			            console.log(event);
+			          }
+			          recognizer.onaudioend = function(event) {
+			            console.log(event);
+			          }
+			          recognizer.onend = function(event) {
+			            console.log(event);
+			            console.log('la session est terminée');
+			            double  = false;
+			            stopped = false;
+			          }
+			          recognizer.onnomatch = function(event) {
+			            console.log(event);
+			          }
+			          recognizer.onerror = function(event) {
+			            console.log(event);
+			          };
+			        },
+
+			        callback : function(res){
+			            var that = this;
+			            var string = res.replace(' ' , '');
+			            if(typeof string === 'string' && string === 'stop' ){
+			              double = true;
+			              this.stop();
+			            }
+			        },
+
+			        start : function(){
+			          words = [];
+			          try {
+			            recognizer.start();
+			          } catch(e) {
+			            console.log(e);
+			          }
+			        },
+
+			        stop : function(callback){
+			          if(!stopped){
+			            stopped = true;
+			            if(recognizer !== null){
+			              try{
+			                recognizer.stop();
+			              }catch(e){
+			                console.log(e);
+			              }
+			            }
+			          }
+			        }, 
+
+			        checkDouble : function(word , array){
+			          return array.indexOf(word) > -1;
+			        }
+			}
+
+			var recognizer;
+			recognition.init($scope);
+
+			$scope.class = "start";
+			$scope.microphone = "fa-microphone";
+			$scope.startRecognition = function(){
+  			 	if ($scope.class === "start"){
+      				recognition.start();
+      				$scope.class = "stop";
+      				$scope.microphone = "fa-microphone-slash";
+  			 	}
+    			else{
+    				recognition.stop();
+      				$scope.class = "start";
+      				$scope.microphone = "fa-microphone";
+    			}			
+			}
+
+
+
 	$scope.postQuestion = function(){
 		if($scope.bigData.postQuestion && $scope.question !== ''){
 			$http({
