@@ -111,6 +111,7 @@
   						</a>
   						<ul class="dropdown-menu" uib-dropdown-menu>
   						  <li><a href="/myaccount">My account</a></li>
+  						  <li><a href="/messages">My messages</a></li>
   						  <li><a href="/subscriptions">My Subscriptions</a></li>
   						  <li role="separator" class="divider"></li>
   						  <li><a href="/logout">Disconnect</a></li>
@@ -162,24 +163,24 @@
 					<button class="btn btn-ui-white" ng-class="{disabled: bigData.postQuestion == false}" ng-click="postQuestion()">Post data</button>
 				</div>
 			</div>
-			<div class="modal-demo">
-			    <script type="text/ng-template" id="myModalContent.html">
-			        <div class="modal-header">
-			            <h3 class="modal-title" id="modal-title">{[{$ctrl.createcategory}]}</h3>
-			        </div>
-			        <div class="modal-body" id="modal-body">
-			        	<input class="form-control" type="text" placeholder="Type category" ng-model="$ctrl.selected.item">
-			        	<p class="pt15 overflow-h">Category : <b>{[{ $ctrl.selected.item }]}</b></p>
-			        </div>
-			        <div class="modal-footer">
-			            <button class="btn btn-md btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-			            <button class="btn btn-md btn-default" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-			        </div>
-			    </script>
-			    <div ng-show="$ctrl.selected">Selection from a modal: {[{ $ctrl.selected }]}</div>
-			    <div class="modal-parent">
-			    </div>
-			</div>
+<!-- 			<div class="modal-demo">
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">{[{$ctrl.createcategory}]}</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+        	<input class="form-control" type="text" placeholder="Type category" ng-model="$ctrl.selected.item">
+        	<p class="pt15 overflow-h">Category : <b>{[{ $ctrl.selected.item }]}</b></p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-md btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-md btn-default" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+        </div>
+    </script>
+    <div ng-show="$ctrl.selected">Selection from a modal: {[{ $ctrl.selected }]}</div>
+    <div class="modal-parent">
+    </div>
+</div> -->
 			<hr>
 		{% endif %}
 

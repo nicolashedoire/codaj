@@ -324,7 +324,7 @@ function ensureAuthenticated(req, res, next) {
 app.get('/technology/:itemName' , (req , res , next) => {
 		console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	// condition for local only
-	var query = 'SELECT q.id , q.name FROM technologies as t inner join questions as q on q.tech_id = t.id WHERE t.slug=?';
+	var query = 'SELECT q.id , q.name , q.user_id , t.name as technologie , u.avatar_url as avatar , u.fullname FROM technologies as t inner join questions as q on q.tech_id = t.id INNER JOIN utilisateurs as u on u.id = q.user_id WHERE t.slug=?';
 	connection.query( query , req.params.itemName , function(err , rows , fields) {
 		if(err) throw err;
 		var results = false;

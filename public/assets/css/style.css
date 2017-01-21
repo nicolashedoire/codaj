@@ -156,6 +156,15 @@ body > .container {
   line-height: 2.98;
 }
 
+
+.dropdown-menu{
+  width: 169px;
+}
+
+.dropdown-menu>li>a {
+  padding: 5px 20px;
+}
+
 /* ------------------- end overide */
 
 
