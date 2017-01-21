@@ -245,6 +245,11 @@
 	        });
 		});
 
+
+		app.controller('detailsQuestionController' , function($scope, $location, $http, $routeParams){
+			// TODO
+		})
+
 		app.controller("myaccountController" , function($scope , $location){
 			console.log('je suis dans le controller myaccount');
 			$scope.myaccountTitle = 'Account';

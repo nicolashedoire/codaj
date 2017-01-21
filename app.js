@@ -336,10 +336,34 @@ app.get('/technology/:itemName' , (req , res , next) => {
 			connected : req.session.connected , 
 	   		username : req.session.username,
 	   		avatar : req.session.avatar,
-	   		arianeText : arianeText
+	   		arianeText : arianeText,
+	   		url : req.url
 		});
 	});
 });
+
+
+app.get('/technology/:itemName/question/:id' , (req , res , next) => {
+	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+	// condition for local only
+	var query = 'SELECT q.id , q.name FROM questions as q WHERE q.id=?';
+	connection.query( query , req.params.id , function(err , rows , fields) {
+		if(err) throw err;
+		var arianeText = req.url.substring(1);
+		arianeText = arianeText.replace(new RegExp('/', 'g') , ' / ');
+		res.render('detailsQuestion/detailsQuestion.twig' , {
+			dirname: __dirname,
+			question : rows, 
+			connected : req.session.connected , 
+	   		username : req.session.username,
+	   		avatar : req.session.avatar,
+	   		arianeText : arianeText,
+	   		url : req.url
+		});
+	});
+});
+
+
 
 app.post('/insertQuestion' , (req, res , next) => {
 	console.log('-------------------------------');
