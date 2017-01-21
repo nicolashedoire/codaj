@@ -4,13 +4,7 @@
 
 {% block body %}
 	<div class="container" >
-		<h1>Tests</h1>
-
-	{% if results == false %}
-		<div class="alert alert-danger" role="alert">
-    		<p>{{noResults}}</p>
-		</div>
-	{% else %}
+		<h1>Choose your test</h1>
 		{% for test in tests %}
     		<div class="col-lg-3 col-sm-6">
                 <div class="card hovercard">
@@ -21,13 +15,17 @@
                         <img alt="" src="/img/notifs/nicolas.png">
                     </div>
                     <div class="info">
+<!--                         <div class="title">
+    <a target="_blank" href="http://scripteden.com/">Hnhack</a>
+</div>
+<div class="desc">Passionate technology</div>
+<div class="desc">Curious developer</div> -->
                     </div>
                     <div class="bottom">
                     </div>
                 </div>
             </div>
         {% endfor %}
-    {% endif %}
 	</div>
 	
 {% endblock %}

@@ -162,12 +162,10 @@ app.get('/tests' , (req, res , next) => {
 });
 
 app.get('/database' , (req, res , next) => {
-
 	req.session.connected = false;
 	if (req.isAuthenticated()){
 		req.session.connected = true;
 	}
-
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	var query = 'SELECT q.id, q.name as questionName , q.tech_id , t.name as technoName from questions as q INNER JOIN technologies as t on t.id = q.tech_id LIMIT 10 OFFSET 0';
 	connection.query( query , function(err , rows , fields) {
@@ -185,7 +183,8 @@ app.get('/database' , (req, res , next) => {
 		   		avatar : req.session.avatar,
 		   		total : rows[0].total,
 		   		numberPages : parseInt(pages),
-		   		arianeText : req.url.substring(1)
+		   		arianeText : req.url.substring(1),
+		   		currentPage : 1
 			});
 		});
 	});
@@ -328,6 +327,10 @@ app.get('/technology/:itemName' , (req , res , next) => {
 	var query = 'SELECT q.id , q.name FROM technologies as t inner join questions as q on q.tech_id = t.id WHERE t.slug=?';
 	connection.query( query , req.params.itemName , function(err , rows , fields) {
 		if(err) throw err;
+		var results = false;
+		if(rows.length > 0){
+			results = true;
+		}
 		var arianeText = req.url.substring(1);
 		arianeText = arianeText.replace('/' , ' / ');
 		res.render('detailsTechnology/detailsTechnology.twig' , {
@@ -337,7 +340,9 @@ app.get('/technology/:itemName' , (req , res , next) => {
 	   		username : req.session.username,
 	   		avatar : req.session.avatar,
 	   		arianeText : arianeText,
-	   		url : req.url
+	   		url : req.url,
+	   		results : results,
+	   		noResults : 'il n\'y a pas encore de questions pour cette technologie...'
 		});
 	});
 });
@@ -363,6 +368,53 @@ app.get('/technology/:itemName/question/:id' , (req , res , next) => {
 	});
 });
 
+
+app.get('/metier/:name/tests' , (req , res , next) => {
+	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+	// condition for local only
+	var query = 'SELECT t.id , t.name , t.description , t.metier_id , m.slug , m.name as metier FROM tests as t INNER JOIN metiers as m on m.id = t.metier_id WHERE m.slug=?';
+	connection.query( query , req.params.name , function(err , rows , fields) {
+		if(err) throw err;
+		var arianeText = req.url.substring(1);
+		var results = false;
+		if(rows.length > 0){
+			results = true;
+		}
+		arianeText = arianeText.replace(new RegExp('/', 'g') , ' / ');
+		res.render('tests/tests.twig' , {
+			dirname: __dirname,
+			tests : rows, 
+			connected : req.session.connected , 
+	   		username : req.session.username,
+	   		avatar : req.session.avatar,
+	   		arianeText : arianeText,
+	   		url : req.url,
+	   		results : results,
+	   		noResults : 'il n\'y a pas encore de tests pour ce metier...'
+		});
+	});
+});
+
+
+app.get('/metier/:name/tests/:id' , (req , res , next) => {
+	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+	// condition for local only
+	var query = 'SELECT t.id , t.name , t.description , t.metier_id FROM tests as t WHERE t.id=?';
+	connection.query( query , req.params.name , function(err , rows , fields) {
+		if(err) throw err;
+		var arianeText = req.url.substring(1);
+		arianeText = arianeText.replace(new RegExp('/', 'g') , ' / ');
+		res.render('tests/testDetails.twig' , {
+			dirname: __dirname,
+			tests : rows, 
+			connected : req.session.connected , 
+	   		username : req.session.username,
+	   		avatar : req.session.avatar,
+	   		arianeText : arianeText,
+	   		url : req.url
+		});
+	});
+});
 
 
 app.post('/insertQuestion' , (req, res , next) => {

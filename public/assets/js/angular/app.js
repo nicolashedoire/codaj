@@ -1,8 +1,6 @@
 		var app = angular.module("coding" , ['ngRoute' , 'ui.bootstrap' ]);
-
 	    // configure routes
 	    app.config(function($routeProvider , $locationProvider , $interpolateProvider) {
-
 	    	$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 		    // delete ! prefix in url 
 		    $locationProvider.hashPrefix("");
@@ -11,7 +9,6 @@
 			  enabled: true,
 			  requireBase: true
 			});*/
-
 /*	        $routeProvider
 	            .when('/', {
 	                controller  : 'homeController'
@@ -47,15 +44,12 @@
 	    // controllers
 	    // 
 		app.controller("codingCtrl" , function($scope , $location , $http , $uibModal){
-
 			$scope.selectedCategory = "Categories";
 			$scope.selectCategoryId = 0;
-
 			$scope.selectCategory = function(category , id){
 				$scope.selectedCategory = category;
 				$scope.selectCategoryId = id;
 			}
-
 	        $http({
 	            method: 'GET',
 	            url: '/listTechnologies'
@@ -69,7 +63,6 @@
 			
 			$scope.arianeUrl = '';
 			$scope.arianeText = '';
-
 		    $scope.$watch(function(){
 		       return $location.path(); 
 		    }, function(newPath){
@@ -285,7 +278,6 @@
 
 
 app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $document) {
-
 	$scope.postQuestion = function(){
 		if($scope.bigData.postQuestion && $scope.question !== ''){
 			$http({
@@ -324,14 +316,12 @@ app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $doc
 
 
   var $ctrl = this;
-  $ctrl.items = ['item1', 'item2', 'item3'];
+  $ctrl.item = '';
   $ctrl.createcategory = 'Create new category';
-
-  $ctrl.animationsEnabled = true;
+  $ctrl.animationsEnabled = false;
 
   $ctrl.open = function (size, parentSelector) {
-    var parentElem = parentSelector ? 
-      angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+    var parentElem = parentSelector ? angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
     var modalInstance = $uibModal.open({
       animation: $ctrl.animationsEnabled,
       ariaLabelledBy: 'modal-title',
@@ -342,8 +332,8 @@ app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $doc
       size: size,
       appendTo: parentElem,
       resolve: {
-        items: function () {
-          return $ctrl.items;
+        item: function () {
+          return $ctrl.item;
         },
         createcategory : function () {
         	return $ctrl.createcategory;
@@ -363,8 +353,8 @@ app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $doc
       animation: $ctrl.animationsEnabled,
       component: 'modalComponent',
       resolve: {
-        items: function () {
-          return $ctrl.items;
+        item: function () {
+          return $ctrl.item;
         },
         createcategory : function () {
         	return $ctrl.createcategory;
@@ -411,12 +401,12 @@ app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $doc
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-app.controller('ModalInstanceCtrl', function ($uibModalInstance, items , createcategory) {
+app.controller('ModalInstanceCtrl', function ($uibModalInstance, item , createcategory) {
   var $ctrl = this;
-  $ctrl.items = items;
+  $ctrl.item = item;
   $ctrl.createcategory = createcategory;
   $ctrl.selected = {
-    item: $ctrl.items[0]
+    item: $ctrl.item
   };
 
   $ctrl.ok = function () {
@@ -441,10 +431,10 @@ app.component('modalComponent', {
     var $ctrl = this;
 
     $ctrl.$onInit = function () {
-      $ctrl.items = $ctrl.resolve.items;
+      $ctrl.item = $ctrl.resolve.item;
       $ctrl.createcategory = $ctrl.resolve.createcategory;
       $ctrl.selected = {
-        item: $ctrl.items[0]
+        item: $ctrl.item
       };
     };
 

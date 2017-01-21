@@ -258,6 +258,10 @@ body > .container {
   margin-bottom: 70px;
 }
 
+.pt15 , .pt-15{
+  padding-top: 15px;
+}
+
 .w40{
   width: 60px;
 }
