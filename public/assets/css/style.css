@@ -101,7 +101,7 @@ body > .container {
 }
 
 .avatar-menu{
-  margin-right: 5px;
+  width: 100%;
 }
 
 /* navbar */
@@ -264,6 +264,10 @@ body > .container {
 
 .w40{
   width: 60px;
+}
+
+.overflow-h{
+  overflow : hidden;
 }
 
 /* voice */
@@ -634,4 +638,11 @@ background-size: cover; */
 .card.hovercard .bottom {
     padding: 0 20px;
     margin-bottom: 17px;
+}
+
+
+.job p{
+  font-weight: bold;
+  font-style: italic;
+  font-size: 18px;
 }
