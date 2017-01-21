@@ -191,6 +191,40 @@ app.get('/database' , (req, res , next) => {
 	});
 });
 
+
+app.get('/database/page/:id' , (req, res , next) => {
+	var idPage = req.params.id;
+	var offset = 10 * parseInt(idPage - 1);
+	req.session.connected = false;
+	if (req.isAuthenticated()){
+		req.session.connected = true;
+	}
+	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+	var query = 'SELECT q.id, q.name as questionName , q.tech_id , t.name as technoName from questions as q INNER JOIN technologies as t on t.id = q.tech_id LIMIT 10 OFFSET ?';
+	connection.query( query , offset ,  function(err , rows , fields) {
+		if(err) throw err;
+		var query = 'SELECT count(id) as total from questions';
+		var questions = rows;
+		connection.query( query , function(err , rows , fields) {
+			var numberPerPage = 10;
+			var pages = Math.ceil(rows[0].total / numberPerPage);
+			var arianeText = req.url.substring(1);
+			arianeText = arianeText.replace(new RegExp('/', 'g') , ' / ');
+			res.render('database/database.twig' , {
+				questions : questions,
+				connected : req.session.connected , 
+		   		username : req.session.username,
+		   		avatar : req.session.avatar,
+		   		total : rows[0].total,
+		   		numberPages : parseInt(pages),
+		   		arianeText : arianeText,
+		   		currentPage : idPage
+			});
+		});
+	});
+});
+
+
 app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('account/myaccount.twig' , {

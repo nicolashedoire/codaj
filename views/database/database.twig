@@ -64,7 +64,11 @@
     </table>
     <ul class="pagination">
       {% for i in 1..numberPages %}
-        <li><a href="#">{{i}}</a></li>
+        {% if currentPage == i %}
+          <li class="active"><a href="/database/page/{{i}}">{{i}}</a></li>
+        {% else %}
+          <li><a href="/database/page/{{i}}">{{i}}</a></li>
+        {% endif %}
       {% endfor %}
     </ul>
   </div>
