@@ -62,7 +62,11 @@
         {% endfor %}
       </tbody>
     </table>
+    <ul class="pagination">
+      {% for i in 1..numberPages %}
+        <li><a href="#">{{i}}</a></li>
+      {% endfor %}
+    </ul>
   </div>
   </div>
-
 {% endblock %}

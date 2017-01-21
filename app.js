@@ -167,7 +167,7 @@ app.get('/database' , (req, res , next) => {
 	if (req.isAuthenticated()){
 		req.session.connected = true;
 	}
-	
+
 	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	var query = 'SELECT q.id, q.name as questionName , q.tech_id , t.name as technoName from questions as q INNER JOIN technologies as t on t.id = q.tech_id LIMIT 10 OFFSET 0';
 	connection.query( query , function(err , rows , fields) {
@@ -175,13 +175,16 @@ app.get('/database' , (req, res , next) => {
 		var query = 'SELECT count(id) as total from questions';
 		var questions = rows;
 		connection.query( query , function(err , rows , fields) {
-			console.log(rows[0].total);
+			var numberPerPage = 10;
+			var pages = Math.ceil(rows[0].total / numberPerPage);
+			console.log(pages);
 			res.render('database/database.twig' , {
 				questions : questions,
 				connected : req.session.connected , 
 		   		username : req.session.username,
 		   		avatar : req.session.avatar,
 		   		total : rows[0].total,
+		   		numberPages : parseInt(pages),
 		   		arianeText : req.url.substring(1)
 			});
 		});
