@@ -29,103 +29,29 @@ angular.module('digital.speech', []).
 });
 
 angular.module('digital.recognition' , []).
-	factory('recognition' , function () {
-		var words = [];
+	factory('recognition' , function ($log) {
 		var recognizer;
-		var double = false;   // => marker double
-		var stopped = false;  // => marker stop recognition
-		var stop = false;     // => marker mot stop
-
 		window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
-		
 		try{
 			recognizer = new window.SpeechRecognition();
 			recognizer.continuous = true;
 			recognizer.interimResults = false;
 			recognizer.maxAlternatives = 0;
 			recognizer.interimResults = 'interim';
-			return recognizer;
-
 		}catch(e){
 			console.log(e);
 		}
 
 		function start () {
-			var res = '';
 			try {
 				recognizer.start();
 			} catch(e) {
 				console.log(e);
 			}
-
-			recognizer.onresult = function(event) {
-			    res = '';
-			    for (var i = event.resultIndex; i < event.results.length; i++) {
-			    	if (event.results[i].isFinal) {
-			        	res += event.results[i][0].transcript;
-			        } else {
-			        	res += event.results[i][0].transcript;
-			        }
-			    }
-			    var items = []; 
-			    items = res.split(' ');
-			    if(!double){
-			        if(items.indexOf('stop') > -1){
-			            stop = true;
-			            double = true;
-			            stop();
-			        }
-			    }
-			   	if(!double){
-			        if(!that.checkDouble(res , words)){
-			            words.push(res);
-			            callback(res);
-			        }else{
-			            console.log('deja present');
-			        }
-			    }
-			}
-
-			recognizer.onsoundend = function(event) {
-			    console.log(event);
-			}
-
-			recognizer.onaudioend = function(event) {
-			    console.log(event);
-			}
-
-			recognizer.onend = function(event) {
-			    console.log(event);
-			    console.log('la session est terminée');
-			    double  = false;
-			    stopped = false;
-			}
-
-			recognizer.onnomatch = function(event) {
-			    console.log(event);
-			}
-
-			recognizer.onerror = function(event) {
-			    console.log(event);
-			}
-
-			function callback (res){
-			    var string = res.replace(' ' , '');
-			    if(typeof string === 'string' && string === 'stop' ){
-			        double = true;
-			        stop();
-			    }
-			}
- 
-			function checkDouble (word , array){
-				return array.indexOf(word) > -1;
-			}
 		}
 
-
 		function stop (){
-			stopped = true;
-			if(recognizer !== null){
+			if(recognizer !== undefined){
 				try{
 			    	recognizer.stop();
 			    }catch(e){
@@ -134,9 +60,49 @@ angular.module('digital.recognition' , []).
 			}
 		}
 
+		function getResults () {
+			recognizer.onresult = function(event) {
+				res = '';
+				for (var i = event.resultIndex; i < event.results.length; i++) {
+				   	if (event.results[i].isFinal) {
+				    	res += event.results[i][0].transcript;
+				    } else {
+				    	res += event.results[i][0].transcript;
+				    }
+				}
+				var items = []; 
+				items = res.split(' ');	
+				console.log(items);
+			}
+		}
+
+			recognizer.onsoundend = function(event) {
+				console.log(event);
+			}
+
+			recognizer.onaudioend = function(event) {
+				console.log(event);
+			}
+
+			recognizer.onend = function(event) {
+				console.log(event);
+				console.log('la session est terminée');
+				double  = false;
+				stopped = false;
+			}
+
+			recognizer.onnomatch = function(event) {
+				console.log(event);
+			}
+
+			recognizer.onerror = function(event) {
+				console.log(event);
+			}
+
 		return {
 			start : start, 
-			stop : stop
+			stop : stop,
+			getResults : getResults
 		};
 	});
 
@@ -365,6 +331,9 @@ angular.module('digital.recognition' , []).
         	$scope.initRecognition = function () {
         		if(window.SpeechRecognition){
         			recognition.start();
+        			$timeout(function () {
+		    		$scope.results = recognition.getResults();         
+		    		}, 500);  
         		}
         	}
 
