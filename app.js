@@ -87,8 +87,7 @@ passport.use(new FacebookStrategy({
   }
 ));
 
-app.get('/' , (req, res , next) => {
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+app.get('/' , formatBreadcrumb  , (req, res , next) => {
 	req.session.connected = false;
 	if (req.isAuthenticated()){
 		req.session.connected = true;
@@ -115,58 +114,50 @@ app.get('/' , (req, res , next) => {
 	});
 });
 
-app.get('/dashboard' , (req, res , next) => {
+app.get('/dashboard' , formatBreadcrumb  , (req, res , next) => {
 	req.session.connected = false;
 	if (req.isAuthenticated()){
 		req.session.connected = true;
 	}
-
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('dashboard/dashboard.twig' , {
 		connected : req.session.connected , 
 	   	username : req.session.username ,
 	   	avatar : req.session.avatar,
-	   	arianeText : req.url.substring(1)
+	   	arianeText : req.arianeText
 	});
 });
 
-app.get('/code' , (req, res , next) => {
+app.get('/code' , formatBreadcrumb  , (req, res , next) => {
 	req.session.connected = false;
 	if (req.isAuthenticated()){
 		req.session.connected = true;
 	}
-
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('code/code.twig' , {
 		connected : req.session.connected , 
 	   	username : req.session.username , 
 	   	avatar : req.session.avatar,
-	   	arianeText : req.url.substring(1)
+	   	arianeText : req.arianeText
 	});
 });
 
-app.get('/tests' , (req, res , next) => {
-
+app.get('/tests' , formatBreadcrumb  , (req, res , next) => {
 	req.session.connected = false;
 	if (req.isAuthenticated()){
 		req.session.connected = true;
 	}
-
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	res.render('tests/tests.twig' , {
 		connected : req.session.connected , 
 	   	username : req.session.username , 
 	   	avatar : req.session.avatar,
-	   	arianeText : req.url.substring(1)
+	   	arianeText : req.arianeText
 	});
 });
 
-app.get('/database' , (req, res , next) => {
+app.get('/database' , formatBreadcrumb  , (req, res , next) => {
 	req.session.connected = false;
 	if (req.isAuthenticated()){
 		req.session.connected = true;
 	}
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	var query = 'SELECT q.id, q.name as questionName , q.tech_id , t.name as technoName from questions as q INNER JOIN technologies as t on t.id = q.tech_id LIMIT 10 OFFSET 0';
 	connection.query( query , function(err , rows , fields) {
 		if(err) throw err;
@@ -175,7 +166,6 @@ app.get('/database' , (req, res , next) => {
 		connection.query( query , function(err , rows , fields) {
 			var numberPerPage = 10;
 			var pages = Math.ceil(rows[0].total / numberPerPage);
-			console.log(pages);
 			res.render('database/database.twig' , {
 				questions : questions,
 				connected : req.session.connected , 
@@ -183,7 +173,7 @@ app.get('/database' , (req, res , next) => {
 		   		avatar : req.session.avatar,
 		   		total : rows[0].total,
 		   		numberPages : parseInt(pages),
-		   		arianeText : req.url.substring(1),
+		   		arianeText : req.arianeText,
 		   		currentPage : 1
 			});
 		});
@@ -191,14 +181,13 @@ app.get('/database' , (req, res , next) => {
 });
 
 
-app.get('/database/page/:id' , (req, res , next) => {
+app.get('/database/page/:id' , formatBreadcrumb  , (req, res , next) => {
 	var idPage = req.params.id;
 	var offset = 10 * parseInt(idPage - 1);
 	req.session.connected = false;
 	if (req.isAuthenticated()){
 		req.session.connected = true;
 	}
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
 	var query = 'SELECT q.id, q.name as questionName , q.tech_id , t.name as technoName from questions as q INNER JOIN technologies as t on t.id = q.tech_id LIMIT 10 OFFSET ?';
 	connection.query( query , offset ,  function(err , rows , fields) {
 		if(err) throw err;
@@ -207,8 +196,6 @@ app.get('/database/page/:id' , (req, res , next) => {
 		connection.query( query , function(err , rows , fields) {
 			var numberPerPage = 10;
 			var pages = Math.ceil(rows[0].total / numberPerPage);
-			var arianeText = req.url.substring(1);
-			arianeText = arianeText.replace(new RegExp('/', 'g') , ' / ');
 			res.render('database/database.twig' , {
 				questions : questions,
 				connected : req.session.connected , 
@@ -216,7 +203,7 @@ app.get('/database/page/:id' , (req, res , next) => {
 		   		avatar : req.session.avatar,
 		   		total : rows[0].total,
 		   		numberPages : parseInt(pages),
-		   		arianeText : arianeText,
+		   		arianeText : req.arianeText,
 		   		currentPage : idPage
 			});
 		});
@@ -224,8 +211,7 @@ app.get('/database/page/:id' , (req, res , next) => {
 });
 
 
-app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+app.get('/myaccount' , ensureAuthenticated , formatBreadcrumb , (req , res , next) => {
 	res.render('account/myaccount.twig' , {
 /*		myaccountTitle : 'Account',
 		profileTitle : 'Profile',
@@ -235,17 +221,16 @@ app.get('/myaccount' , ensureAuthenticated , (req , res , next) => {
 		connected : req.session.connected , 
 	   	username : req.session.username,
 	   	avatar : req.session.avatar,
-	   	arianeText : req.url.substring(1)
+	   	arianeText : req.arianeText
 	});
 });
 
-app.get('/subscriptions' , ensureAuthenticated , (req , res , next) => {
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+app.get('/subscriptions' , ensureAuthenticated , formatBreadcrumb , (req , res , next) => {
 	res.render('subscriptions/subscriptions.twig' , {
 		connected : req.session.connected , 
 	   	username : req.session.username ,
 	   	avatar : req.session.avatar,
-	   	arianeText : req.url.substring(1)
+	   	arianeText : req.arianeText
 	});
 });
 
@@ -258,8 +243,7 @@ app.get('/auth/facebook/callback' ,  passport.authenticate('facebook', {
   })
 );
 
-app.get('/logout' , ensureAuthenticated , (req, res , next) => {
-  console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+app.get('/logout' , ensureAuthenticated , formatBreadcrumb  , (req, res , next) => {
   req.session.destroy();
   req.logout();
   res.redirect('/');
@@ -319,10 +303,18 @@ function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
 }
 
+
+function formatBreadcrumb(req , res , next) {
+	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+	var arianeText = req.url.substring(1);
+	arianeText = arianeText.replace(new RegExp('/', 'g') , ' / ');
+	req.arianeText = arianeText;
+	return next();
+}
+
 // End Oauth facebook
 
-app.get('/technology/:itemName' , (req , res , next) => {
-		console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+app.get('/technology/:itemName' , formatBreadcrumb  , (req , res , next) => {
 	// condition for local only
 	var query = 'SELECT q.id , q.name , q.user_id , t.name as technologie , u.avatar_url as avatar , u.fullname FROM technologies as t inner join questions as q on q.tech_id = t.id INNER JOIN utilisateurs as u on u.id = q.user_id WHERE t.slug=?';
 	connection.query( query , req.params.itemName , function(err , rows , fields) {
@@ -331,15 +323,13 @@ app.get('/technology/:itemName' , (req , res , next) => {
 		if(rows.length > 0){
 			results = true;
 		}
-		var arianeText = req.url.substring(1);
-		arianeText = arianeText.replace('/' , ' / ');
 		res.render('detailsTechnology/detailsTechnology.twig' , {
 			dirname: __dirname,
 			questions : rows, 
 			connected : req.session.connected , 
 	   		username : req.session.username,
 	   		avatar : req.session.avatar,
-	   		arianeText : arianeText,
+	   		arianeText : req.arianeText,
 	   		url : req.url,
 	   		results : results,
 	   		noResults : 'il n\'y a pas encore de questions pour cette technologie...'
@@ -348,14 +338,11 @@ app.get('/technology/:itemName' , (req , res , next) => {
 });
 
 
-app.get('/technology/:itemName/question/:id' , (req , res , next) => {
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+app.get('/technology/:itemName/question/:id' , formatBreadcrumb  , (req , res , next) => {
 	// condition for local only
 	var query = 'SELECT q.id , q.name FROM questions as q WHERE q.id=?';
 	connection.query( query , req.params.id , function(err , rows , fields) {
 		if(err) throw err;
-		var arianeText = req.url.substring(1);
-		arianeText = arianeText.replace(new RegExp('/', 'g') , ' / ');
 		res.render('detailsQuestion/detailsQuestion.twig' , {
 			dirname: __dirname,
 			question : rows, 
@@ -369,25 +356,22 @@ app.get('/technology/:itemName/question/:id' , (req , res , next) => {
 });
 
 
-app.get('/metier/:name/tests' , (req , res , next) => {
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+app.get('/metier/:name/tests' , formatBreadcrumb  , (req , res , next) => {
 	// condition for local only
 	var query = 'SELECT t.id , t.name , t.description , t.metier_id , m.slug , m.name as metier FROM tests as t INNER JOIN metiers as m on m.id = t.metier_id WHERE m.slug=?';
 	connection.query( query , req.params.name , function(err , rows , fields) {
 		if(err) throw err;
-		var arianeText = req.url.substring(1);
 		var results = false;
 		if(rows.length > 0){
 			results = true;
 		}
-		arianeText = arianeText.replace(new RegExp('/', 'g') , ' / ');
 		res.render('tests/tests.twig' , {
 			dirname: __dirname,
 			tests : rows, 
 			connected : req.session.connected , 
 	   		username : req.session.username,
 	   		avatar : req.session.avatar,
-	   		arianeText : arianeText,
+	   		arianeText : req.arianeText,
 	   		url : req.url,
 	   		results : results,
 	   		noResults : 'il n\'y a pas encore de tests pour ce metier...'
@@ -396,21 +380,18 @@ app.get('/metier/:name/tests' , (req , res , next) => {
 });
 
 
-app.get('/metier/:name/tests/:id' , (req , res , next) => {
-	console.log('request on : ' + req.url + ' | Method : ' + req.method + ' | Adress : ' + req.connection.remoteAddress);
+app.get('/metier/:name/tests/:id' , formatBreadcrumb  , (req , res , next) => {
 	// condition for local only
 	var query = 'SELECT t.id , t.name , t.description , t.metier_id FROM tests as t WHERE t.id=?';
 	connection.query( query , req.params.name , function(err , rows , fields) {
 		if(err) throw err;
-		var arianeText = req.url.substring(1);
-		arianeText = arianeText.replace(new RegExp('/', 'g') , ' / ');
 		res.render('tests/testDetails.twig' , {
 			dirname: __dirname,
 			tests : rows, 
 			connected : req.session.connected , 
 	   		username : req.session.username,
 	   		avatar : req.session.avatar,
-	   		arianeText : arianeText,
+	   		arianeText : req.arianeText,
 	   		url : req.url
 		});
 	});
