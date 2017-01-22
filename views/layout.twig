@@ -13,6 +13,7 @@
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 			<link rel="stylesheet" href="https://getbootstrap.com/examples/sticky-footer-navbar/sticky-footer-navbar.css">
 			<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+			 <link rel="stylesheet" href="/components/angular-ui-notification/dist/angular-ui-notification.css">
 			<link rel="stylesheet" href="/assets/css/style.css">
 		{% endblock %}
 	</head>
@@ -165,24 +166,24 @@
 			</div>
 
 			<p>{[{reco}]}</p>
-<!-- 			<div class="modal-demo">
-    <script type="text/ng-template" id="myModalContent.html">
-        <div class="modal-header">
-            <h3 class="modal-title" id="modal-title">{[{$ctrl.createcategory}]}</h3>
-        </div>
-        <div class="modal-body" id="modal-body">
-        	<input class="form-control" type="text" placeholder="Type category" ng-model="$ctrl.selected.item">
-        	<p class="pt15 overflow-h">Category : <b>{[{ $ctrl.selected.item }]}</b></p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-md btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-            <button class="btn btn-md btn-default" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-        </div>
-    </script>
-    <div ng-show="$ctrl.selected">Selection from a modal: {[{ $ctrl.selected }]}</div>
-    <div class="modal-parent">
-    </div>
-</div> -->
+			<div class="modal-demo">
+			    <script type="text/ng-template" id="myModalContent.html">
+			        <div class="modal-header">
+			            <h3 class="modal-title" id="modal-title">{[{$ctrl.createcategory}]}</h3>
+			        </div>
+			        <div class="modal-body" id="modal-body">
+			        	<input class="form-control" type="text" placeholder="Type category" ng-model="$ctrl.selected.item">
+			        	<p class="pt15 overflow-h">Category : <b>{[{ $ctrl.selected.item }]}</b></p>
+			        </div>
+			        <div class="modal-footer">
+			            <button class="btn btn-md btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+			            <button class="btn btn-md btn-default" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+			        </div>
+			    </script>
+			    <div ng-show="$ctrl.selected">Selection from a modal: {[{ $ctrl.selected }]}</div>
+			    <div class="modal-parent">
+			    </div>
+			</div> 
 			<hr>
 		{% endif %}
 
@@ -256,9 +257,11 @@
 		 	</footer>
 		{% endblock %}
 		{% block scripts %}
-			<!-- version 1.6.1 -->
+			<!-- Angular 1.6.1 -->
 			<script type="text/javascript" src="/components/angular/angular.js"></script>
 			<script type="text/javascript" src="/components/angular-route/angular-route.js"></script>
+			<!-- https://github.com/alexcrack/angular-ui-notification -->
+			<script type="text/javascript" src="/components/angular-ui-notification/dist/angular-ui-notification.js"></script>	
 			<script type="text/javascript" src="/components/angular-bootstrap/ui-bootstrap.js"></script>
 			<script type="text/javascript" src="/components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 			<script type="text/javascript" src="/components/chart.js/dist/Chart.js"></script>

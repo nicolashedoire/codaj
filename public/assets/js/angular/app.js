@@ -1,8 +1,19 @@
-		var app = angular.module("coding" , ['ngRoute' , 'ui.bootstrap' ]);
+		var app = angular.module("coding" , ['ngRoute' , 'ui.bootstrap' , 'ui-notification' ]);
 	    // configure routes
-	    app.config(function($routeProvider , $locationProvider , $interpolateProvider) {
+	    app.config(function($routeProvider , $locationProvider , $interpolateProvider , NotificationProvider) {
 	    	$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
 		    // delete ! prefix in url 
+		    
+	        NotificationProvider.setOptions({
+	            delay: 3000,
+	            startTop: 20,
+	            startRight: 10,
+	            verticalSpacing: 20,
+	            horizontalSpacing: 20,
+	            positionX: 'right',
+	            positionY: 'bottom'
+	        });
+
 		    $locationProvider.hashPrefix("");
 		    // use the HTML5 History API
 /*        	$locationProvider.html5Mode({
@@ -43,8 +54,7 @@
 
 	    // controllers
 	    // 
-		app.controller("codingCtrl" , function($scope , $location , $http , $uibModal){
-
+		app.controller("codingCtrl" , function($scope , $location , $http , $uibModal , Notification){
 
 			$scope.selectedCategory = "Categories";
 			$scope.selectCategoryId = 0;
@@ -282,7 +292,7 @@
 		});
 
 
-app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $document) {
+app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $document , Notification) {
 
 			var words = [];
 			var recognizer;
@@ -432,10 +442,10 @@ app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $doc
 					question : $scope.question ,
 					technologieId : $scope.selectCategoryId
 				}
-			}).then((response) => {
-				console.log(response); 
+			}).then((response) => { 
+					Notification.success('Question enregistrée avec success');
 				} , function(error){
-					console.log(error);
+					Notification.error({message: 'Une erreur est survenue...', positionY: 'bottom', positionX: 'right'});
 			});
 		}
 	}
