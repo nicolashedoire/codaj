@@ -351,6 +351,10 @@ angular.module('digital.recognition' , []).
 	    				};
         			} , 0);
         		}
+
+/*        		$timeout(function(){
+        			$scope.stopRecognition();
+        		} , 10000);*/
         	}
 
         	$scope.stopRecognition = function () {
@@ -360,6 +364,9 @@ angular.module('digital.recognition' , []).
 			        	sentence: ''
 			    	};
         		}
+/*        		$timeout(function(){
+        			$scope.initRecognition();
+        		} , 500);*/
         	}
       
 	        $scope.submitEntry = function () {
@@ -447,6 +454,7 @@ angular.module('digital.recognition' , []).
 				}
 			}).then((response) => { 
 					Notification.success('Question enregistrée avec success');
+					$scope.question = '';
 				} , function(error){
 					Notification.error({message: 'Une erreur est survenue...', positionY: 'bottom', positionX: 'right'});
 			});

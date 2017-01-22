@@ -655,3 +655,67 @@ background-size: cover; */
   font-style: italic;
   font-size: 18px;
 }
+
+img.warrior{
+  cursor : pointer;
+  animation: hue-rotate 3.5s ease-in;
+  animation-fill-mode: forwards;
+  width: 70px;
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -o-perspective: 1000;
+  perspective: 1000;
+  -webkit-transition: 5s;
+  -webkit-transform-style: preserve-3d;
+  -moz-transition: 5s;
+  -moz-transform-style: preserve-3d;
+  -o-transition: 5s;
+  -o-transform-style: preserve-3d;
+  transition: 5s;
+  transform-style: preserve-3d;
+}
+@keyframes hue-rotate {
+  from {
+/*     -webkit-filter: hue-rotate(0);
+-moz-filter: hue-rotate(0);
+-ms-filter: hue-rotate(0);
+filter: hue-rotate(0); */
+  }
+
+
+  75% {
+    -webkit-transform: rotateY(1800deg) scale3d(1.5, 1.5, 1.5);
+    transform: rotateY(1800deg) scale3d(1.5, 1.5, 1.5);
+  }
+
+  80% {
+    -webkit-transform: scale3d(2, 1, 1.5);
+    transform: scale3d(2, 1, 1.5);
+  }
+
+  85% {
+    -webkit-transform: scale3d(1, 2, 1.5);
+    transform: scale3d(1, 2, 1.5);
+  }
+
+  90% {
+    -webkit-transform: scale3d(1.65, 1.35, 1.5);
+    transform: scale3d(1.65, 1.35, 1.5);
+  }
+
+  95% {
+    -webkit-transform: scale3d(1.45, 1.55, 1.5);
+    transform: scale3d(1.45, 1.55, 1.5);
+  }
+
+  99% {
+    -webkit-transform: scale3d(1.55, 1.45, 1.5);
+    transform: scale3d(1.55, 1.45, 1.5);
+  }
+
+  to {
+    -webkit-transform: scale3d(1.5, 1.5, 1.5);
+    transform: scale3d(1.5, 1.5, 1.5);
+  }
+}
+
