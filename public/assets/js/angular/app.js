@@ -1,9 +1,42 @@
-		var app = angular.module("coding" , ['ngRoute' , 'ui.bootstrap' , 'ui-notification' ]);
+angular.module('digitalbs.speech', []).
+    factory('speech', function () {
+        if(window.speechSynthesis) {
+            var msg = new SpeechSynthesisUtterance();
+        }
+        function getVoices() {
+            window.speechSynthesis.getVoices();
+          return window.speechSynthesis.getVoices();
+        }
+  
+        function sayIt(text, config) {
+            var voices = getVoices();
+         
+            //choose voice. Fallback to default
+            msg.voice = config && config.voiceIndex ? voices[config.voiceIndex] : voices[0];
+            msg.volume = config && config.volume ? config.volume : 1;
+            msg.rate = config && config.rate ? config.rate : 1;
+            msg.pitch = config && config.pitch ? config.pitch : 1;
+
+            //message for speech
+            msg.text = text;
+
+            speechSynthesis.speak(msg);
+        }
+
+        return {
+            sayText: sayIt,
+            getVoices: getVoices
+        };
+});
+
+
+		var app = angular.module("coding" , ['ngRoute' , 'ui.bootstrap' , 'ui-notification'  , 'digitalbs.speech']);
 	    // configure routes
 	    app.config(function($routeProvider , $locationProvider , $interpolateProvider , NotificationProvider) {
+	    	// Change brackets {{}} to {[{}]} (because use twig)
 	    	$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
-		    // delete ! prefix in url 
 		    
+		    // Notifications module config
 	        NotificationProvider.setOptions({
 	            delay: 3000,
 	            startTop: 20,
@@ -15,45 +48,9 @@
 	        });
 
 		    $locationProvider.hashPrefix("");
-		    // use the HTML5 History API
-/*        	$locationProvider.html5Mode({
-			  enabled: true,
-			  requireBase: true
-			});*/
-/*	        $routeProvider
-	            .when('/', {
-	                controller  : 'homeController'
-	            })
-	            .when('/dashboard', {
-	                controller  : 'dashboardController'
-	            })
-	            // route for the logout page
-	            .when('/code', {
-	            	controller : 'codeController'
-	            })
-	            .when('/tests', {
-	                controller : 'testsController'
-	            })
-	            .when('/database' , {
-	                controller : 'databaseController'
-	            })
-	            .when('/myaccount' , {
-	                controller : 'myaccountController'
-	            })
-	            .when('/subscriptions' , {
-	                controller : 'subscriptionsController'
-	            })
-	            .when('/technology/:itemName' , {
-	                controller : 'detailsTechnologyController'
-	            })
-	           	.when('/_=_' , {
-	                controller  : 'homeController'
-	            })*/
-/*	            .otherwise({ redirectTo: '/login' });*/
 	    });
 
 	    // controllers
-	    // 
 		app.controller("codingCtrl" , function($scope , $location , $http , $uibModal , Notification){
 
 			$scope.selectedCategory = "Categories";
@@ -198,14 +195,13 @@
 			    data: data,
 			    type: 'polarArea',
 			    options: {
-        elements: {
-            arc: {
-                borderColor: "#000000"
-            }
-        }
-    }
+		        elements: {
+		            arc: {
+		                borderColor: "#000000"
+		            }
+		        }
+		    }
 			});
-
 		});
 
 		app.controller("codeController" , function($scope , $location){
@@ -219,22 +215,10 @@
 		app.controller("databaseController" , function($scope , $location , $http){
 			console.log('je suis dans le controller database');
 			$scope.titleQuestions = 'Liste des questions';
-
-/*	        $http({
-	            method: 'GET',
-	            url: '/listQuestions'
-	        }).then(function successCallback(response) {
-	            console.log(response.data);
-	            $scope.questions = response.data;
-	        }, function errorCallback(response) {
-	            console.log(response);
-	        });*/
-
 	        $scope.sortType     = 'name'; // set the default sort type
   			$scope.sortReverse  = false;  // set the default sort order
   			$scope.searchQuestion   = '';     // set the default search/filter term
 		});
-
 
 		app.controller('detailsTechnologyController' , function($scope, $location,$http, $routeParams){
 			$scope.itemName = $routeParams.itemName;
@@ -253,6 +237,33 @@
 	        });
 		});
 
+		app.controller('speechCtrl', function ($scope, $timeout, speech) {
+      		$scope.support = false;
+      		if(window.speechSynthesis) {
+        		$scope.support = true;                                    
+		    	$timeout(function () {
+		    		$scope.voices = speech.getVoices();          
+		    	}, 500);  
+		    }
+
+        	$scope.pitch = 1;
+        	$scope.rate = 1;           
+        	$scope.volume = 1;
+      
+	        $scope.submitEntry = function () {
+	            var voiceIdx = $scope.voices.indexOf($scope.optionSelected),
+	                config = {
+	                  voiceIndex: voiceIdx,
+	                  rate: $scope.rate,
+	                  pitch: $scope.pitch,
+	                  volume: $scope.volume
+	                };
+
+	            if(window.speechSynthesis) {
+	                speech.sayText($scope.msg, config);
+	            }
+	        }
+    	});
 
 		app.controller('detailsQuestionController' , function($scope, $location, $http, $routeParams){
 			// TODO
@@ -292,7 +303,7 @@
 		});
 
 
-app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $document , Notification) {
+	app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $document , Notification) {
 
 			var words = [];
 			var recognizer;
@@ -435,6 +446,7 @@ app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $doc
 
 	$scope.postQuestion = function(){
 		if($scope.bigData.postQuestion && $scope.question !== ''){
+			console.log('post question');
 			$http({
 			    url: 'insertQuestion',
 				method: 'POST',
