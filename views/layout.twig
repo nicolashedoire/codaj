@@ -146,6 +146,8 @@
 			    	<button class="btn-ui" style="height: 46px; border-radius:0px;" ng-click="stopRecognition()">stop recognition</button>
 				</div>
 			  </form>
+			  <p ng-model="inputModel.sentence"></p>
+			  <pre ng-bind="inputModel.sentence"></pre>
 			</div>
 
 		{% endblock %}

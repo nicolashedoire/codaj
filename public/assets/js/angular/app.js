@@ -29,7 +29,7 @@ angular.module('digital.speech', []).
 });
 
 angular.module('digital.recognition' , []).
-	factory('recognition' , function ($log) {
+	factory('recognition' , function ($rootScope,$timeout) {
 		var recognizer;
 		window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
 		try{
@@ -61,6 +61,7 @@ angular.module('digital.recognition' , []).
 		}
 
 		function getResults () {
+			var items = [];
 			recognizer.onresult = function(event) {
 				res = '';
 				for (var i = event.resultIndex; i < event.results.length; i++) {
@@ -69,35 +70,43 @@ angular.module('digital.recognition' , []).
 				    } else {
 				    	res += event.results[i][0].transcript;
 				    }
-				}
-				var items = []; 
+				} 
 				items = res.split(' ');	
 				console.log(items);
+				$rootScope.$watch(function () {
+			        return $rootScope.inputModel.sentence = items;
+			    }, function (value) {
+			        console.log("inputModel.sentence changed");
+			    });   
 			}
+
 		}
 
-			recognizer.onsoundend = function(event) {
+		recognizer.onsoundend = function(event) {
 				console.log(event);
-			}
+		}
 
-			recognizer.onaudioend = function(event) {
+		recognizer.onaudioend = function(event) {
 				console.log(event);
-			}
+		}
 
-			recognizer.onend = function(event) {
-				console.log(event);
-				console.log('la session est terminée');
-				double  = false;
-				stopped = false;
-			}
+		recognizer.onend = function(event) {
+			console.log(event);
+			console.log('la session est terminée');
+			$rootScope.$watch(function () {
+			        return $rootScope.inputModel.sentence = '';
+			}, function (value) {
+			        console.log("inputModel.sentence changed");
+			});   
+		}
 
-			recognizer.onnomatch = function(event) {
-				console.log(event);
-			}
+		recognizer.onnomatch = function(event) {
+			console.log(event);
+		}
 
-			recognizer.onerror = function(event) {
-				console.log(event);
-			}
+		recognizer.onerror = function(event) {
+			console.log(event);
+		}
 
 		return {
 			start : start, 
@@ -118,8 +127,8 @@ angular.module('digital.recognition' , []).
 	            delay: 3000,
 	            startTop: 20,
 	            startRight: 10,
-	            verticalSpacing: 20,
-	            horizontalSpacing: 20,
+		            verticalSpacing: 20,
+		            horizontalSpacing: 20,
 	            positionX: 'right',
 	            positionY: 'bottom'
 	        });
@@ -314,7 +323,8 @@ angular.module('digital.recognition' , []).
 	        });
 		});
 
-		app.controller('speechCtrl', function ($scope, $timeout, speech , recognition) {
+		app.controller('speechCtrl', function ($scope, $timeout, $interval , $rootScope, speech , recognition) {
+			console.log('je suis dans le controller speech');
       		$scope.support = false;
       		if(window.speechSynthesis) {
         		$scope.support = true;                                    
@@ -327,19 +337,28 @@ angular.module('digital.recognition' , []).
         	$scope.rate = 1;           
         	$scope.volume = 1;
 
+        	$rootScope.inputModel = {
+        		sentence: ''
+    		};
+
 
         	$scope.initRecognition = function () {
         		if(window.SpeechRecognition){
         			recognition.start();
-        			$timeout(function () {
-		    		$scope.results = recognition.getResults();         
-		    		}, 500);  
+        			$interval(function(){
+	        			$rootScope.inputModel = {
+	        				sentence: recognition.getResults()
+	    				};
+        			} , 0);
         		}
         	}
 
         	$scope.stopRecognition = function () {
         		if(window.SpeechRecognition){
         			recognition.stop();
+		        	$rootScope.inputModel = {
+			        	sentence: ''
+			    	};
         		}
         	}
       
