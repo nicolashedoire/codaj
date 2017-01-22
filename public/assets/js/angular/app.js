@@ -1,11 +1,11 @@
-angular.module('digitalbs.speech', []).
+angular.module('digital.speech', []).
     factory('speech', function () {
         if(window.speechSynthesis) {
             var msg = new SpeechSynthesisUtterance();
         }
         function getVoices() {
             window.speechSynthesis.getVoices();
-          return window.speechSynthesis.getVoices();
+        	return window.speechSynthesis.getVoices();
         }
   
         function sayIt(text, config) {
@@ -19,7 +19,6 @@ angular.module('digitalbs.speech', []).
 
             //message for speech
             msg.text = text;
-
             speechSynthesis.speak(msg);
         }
 
@@ -29,8 +28,120 @@ angular.module('digitalbs.speech', []).
         };
 });
 
+angular.module('digital.recognition' , []).
+	factory('recognition' , function () {
+		var words = [];
+		var recognizer;
+		var double = false;   // => marker double
+		var stopped = false;  // => marker stop recognition
+		var stop = false;     // => marker mot stop
 
-		var app = angular.module("coding" , ['ngRoute' , 'ui.bootstrap' , 'ui-notification'  , 'digitalbs.speech']);
+		window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+		
+		try{
+			recognizer = new window.SpeechRecognition();
+			recognizer.continuous = true;
+			recognizer.interimResults = false;
+			recognizer.maxAlternatives = 0;
+			recognizer.interimResults = 'interim';
+			return recognizer;
+
+		}catch(e){
+			console.log(e);
+		}
+
+		function start () {
+			var res = '';
+			try {
+				recognizer.start();
+			} catch(e) {
+				console.log(e);
+			}
+
+			recognizer.onresult = function(event) {
+			    res = '';
+			    for (var i = event.resultIndex; i < event.results.length; i++) {
+			    	if (event.results[i].isFinal) {
+			        	res += event.results[i][0].transcript;
+			        } else {
+			        	res += event.results[i][0].transcript;
+			        }
+			    }
+			    var items = []; 
+			    items = res.split(' ');
+			    if(!double){
+			        if(items.indexOf('stop') > -1){
+			            stop = true;
+			            double = true;
+			            stop();
+			        }
+			    }
+			   	if(!double){
+			        if(!that.checkDouble(res , words)){
+			            words.push(res);
+			            callback(res);
+			        }else{
+			            console.log('deja present');
+			        }
+			    }
+			}
+
+			recognizer.onsoundend = function(event) {
+			    console.log(event);
+			}
+
+			recognizer.onaudioend = function(event) {
+			    console.log(event);
+			}
+
+			recognizer.onend = function(event) {
+			    console.log(event);
+			    console.log('la session est terminée');
+			    double  = false;
+			    stopped = false;
+			}
+
+			recognizer.onnomatch = function(event) {
+			    console.log(event);
+			}
+
+			recognizer.onerror = function(event) {
+			    console.log(event);
+			}
+
+			function callback (res){
+			    var string = res.replace(' ' , '');
+			    if(typeof string === 'string' && string === 'stop' ){
+			        double = true;
+			        stop();
+			    }
+			}
+ 
+			function checkDouble (word , array){
+				return array.indexOf(word) > -1;
+			}
+		}
+
+
+		function stop (){
+			stopped = true;
+			if(recognizer !== null){
+				try{
+			    	recognizer.stop();
+			    }catch(e){
+			    	console.log(e);
+			    }
+			}
+		}
+
+		return {
+			start : start, 
+			stop : stop
+		};
+	});
+
+
+		var app = angular.module("coding" , ['ngRoute' , 'ui.bootstrap' , 'ui-notification'  , 'digital.speech' , 'digital.recognition']);
 	    // configure routes
 	    app.config(function($routeProvider , $locationProvider , $interpolateProvider , NotificationProvider) {
 	    	// Change brackets {{}} to {[{}]} (because use twig)
@@ -237,7 +348,7 @@ angular.module('digitalbs.speech', []).
 	        });
 		});
 
-		app.controller('speechCtrl', function ($scope, $timeout, speech) {
+		app.controller('speechCtrl', function ($scope, $timeout, speech , recognition) {
       		$scope.support = false;
       		if(window.speechSynthesis) {
         		$scope.support = true;                                    
@@ -249,6 +360,19 @@ angular.module('digitalbs.speech', []).
         	$scope.pitch = 1;
         	$scope.rate = 1;           
         	$scope.volume = 1;
+
+
+        	$scope.initRecognition = function () {
+        		if(window.SpeechRecognition){
+        			recognition.start();
+        		}
+        	}
+
+        	$scope.stopRecognition = function () {
+        		if(window.SpeechRecognition){
+        			recognition.stop();
+        		}
+        	}
       
 	        $scope.submitEntry = function () {
 	            var voiceIdx = $scope.voices.indexOf($scope.optionSelected),
@@ -305,138 +429,17 @@ angular.module('digitalbs.speech', []).
 
 	app.controller('ModalDemoCtrl', function ($scope , $http , $uibModal, $log, $document , Notification) {
 
-			var words = [];
-			var recognizer;
-			var double = false;   // => marker double
-			var stopped = false;  // => marker stop recognition
-			var stop = false;     // => marker mot stop
-
-			// ajouter un timer qui stoppe la recognition a 1 min 30
-
-			recognition = {
-			        create : function(){
-			          window.SpeechRecognition = window.SpeechRecognition       ||
-			                                     window.webkitSpeechRecognition ||
-			                                     null;
-			          try{
-			            recognizer = new window.SpeechRecognition();
-			            recognizer.continuous = true;
-			            recognizer.interimResults = false;
-			            recognizer.maxAlternatives = 0;
-			            recognizer.interimResults = 'interim';
-			            return recognizer;            
-			          }catch(e){
-			            console.log(e);
-			          }
-			        },
-
-			        init : function($scope){
-			          var that  = this;
-			          this.create();
-			          var res = '';
-			          recognizer.onresult = function(event) {
-			            res = '';
-			            /*$('#module').html('');*/
-			            for (var i = event.resultIndex; i < event.results.length; i++) {
-			              if (event.results[i].isFinal) {
-			                res += event.results[i][0].transcript;
-			              } else {
-			                res += event.results[i][0].transcript;
-			              }
-			            }
-			            var items = []; 
-			            items = res.split(' ');
-			            if(!double){
-			              if(items.indexOf('stop') > -1){
-			                stop = true;
-			                double = true;
-			                console.log('pass 1');
-			                that.stop();
-			              }
-			            }
-			            if(!double){
-			              if(!that.checkDouble(res , words)){
-			              	console.log('----');
-			                console.log(items);
-			                console.log(res);
-			                words.push(res);
-			             	return $scope.reco = res;
-			                console.log('pass 2');
-			                that.callback(res);
-			              }else{
-			                console.log('deja present');
-			              }
-			            }
-			          }
-			          recognizer.onsoundend = function(event) {
-			            console.log(event);
-			          }
-			          recognizer.onaudioend = function(event) {
-			            console.log(event);
-			          }
-			          recognizer.onend = function(event) {
-			            console.log(event);
-			            console.log('la session est terminée');
-			            double  = false;
-			            stopped = false;
-			          }
-			          recognizer.onnomatch = function(event) {
-			            console.log(event);
-			          }
-			          recognizer.onerror = function(event) {
-			            console.log(event);
-			          };
-			        },
-
-			        callback : function(res){
-			            var that = this;
-			            var string = res.replace(' ' , '');
-			            if(typeof string === 'string' && string === 'stop' ){
-			              double = true;
-			              this.stop();
-			            }
-			        },
-
-			        start : function(){
-			          words = [];
-			          try {
-			            recognizer.start();
-			          } catch(e) {
-			            console.log(e);
-			          }
-			        },
-
-			        stop : function(callback){
-			          if(!stopped){
-			            stopped = true;
-			            if(recognizer !== null){
-			              try{
-			                recognizer.stop();
-			              }catch(e){
-			                console.log(e);
-			              }
-			            }
-			          }
-			        }, 
-
-			        checkDouble : function(word , array){
-			          return array.indexOf(word) > -1;
-			        }
-			}
-
-			var recognizer;
-			recognition.init($scope);
 
 			$scope.class = "start";
 			$scope.microphone = "fa-microphone";
 			$scope.startRecognition = function(){
   			 	if ($scope.class === "start"){
-      				recognition.start();
+      				/*recognition.start();*/
       				$scope.class = "stop";
       				$scope.microphone = "fa-microphone-slash";
   			 	}
     			else{
-    				recognition.stop();
+    				/*recognition.stop();*/
       				$scope.class = "start";
       				$scope.microphone = "fa-microphone";
     			}			
